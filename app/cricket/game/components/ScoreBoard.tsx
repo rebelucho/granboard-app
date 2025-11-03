@@ -1,5 +1,6 @@
 import {
   CricketGameMode,
+  CricketNumber,
   PlayerState,
   CRICKET_NUMBERS,
   getPlayerScore,
@@ -20,7 +21,7 @@ export function ScoreBoard({
   gameFinished,
 }: ScoreBoardProps) {
   // Check if all players have closed a specific number
-  const isNumberClosedByAll = (num: number) => {
+  const isNumberClosedByAll = (num: CricketNumber) => {
     return players.every((p) => getPlayerScore(p, num).marks >= 3);
   };
 
@@ -38,7 +39,7 @@ export function ScoreBoard({
   const leftPlayers = players.slice(0, midPoint);
   const rightPlayers = players.slice(midPoint);
 
-  const renderPlayerCell = (playerState: PlayerState | undefined, num: number) => {
+  const renderPlayerCell = (playerState: PlayerState | undefined, num: CricketNumber) => {
     if (!playerState) {
       return <td key="empty" className="p-2"></td>;
     }
