@@ -1,0 +1,79 @@
+version: 2
+updates:
+  # Surveillance des packages npm/pnpm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Paris"
+
+    # Limite le nombre de PRs ouvertes simultanément
+    open-pull-requests-limit: 10
+
+    # Ajoute des labels aux PRs
+    labels:
+      - "dependencies"
+      - "automated"
+
+    # Rebase automatique les PRs en cas de conflit
+    rebase-strategy: "auto"
+
+    # Grouper les mises à jour pour réduire le nombre de PRs
+    groups:
+      # Groupe pour les types TypeScript (changements mineurs/patches ensemble)
+      typescript-types:
+        patterns:
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # Groupe pour les outils de test
+      testing-tools:
+        patterns:
+          - "@testing-library/*"
+          - "jest*"
+          - "@playwright/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # Groupe pour les outils de linting
+      linting-tools:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Ignorer certaines dépendances si nécessaire
+    # ignore:
+    #   - dependency-name: "react"
+    #     update-types: ["version-update:semver-major"]
+
+    # Commit message prefix
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+
+    # Reviewer et assignee par défaut
+    reviewers:
+      - "bastiennoel93"
+
+    assignees:
+      - "bastiennoel93"
+
+  # Surveillance des GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"
