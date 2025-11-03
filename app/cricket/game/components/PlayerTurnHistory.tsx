@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Player } from "@/services/cricket";
 import { PlayerTurn } from "../hooks/usePlayerTurnHistory";
 import { Segment } from "@/services/boardinfo";
@@ -10,20 +11,22 @@ interface PlayerTurnHistoryProps {
 }
 
 export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound }: PlayerTurnHistoryProps) {
+  const t = useTranslations();
+
   return (
     <div className="bg-slate-900 rounded-xl shadow-2xl border-2 border-slate-700 h-full flex flex-col overflow-hidden">
       <h3 className="text-lg font-bold text-white px-4 py-3 border-b-2 border-cyan-500 flex-shrink-0">
-        Historique - {player.name}
+        {t('cricket.game.history')} - {player.name}
       </h3>
       <div className="overflow-y-auto flex-1 p-4 space-y-2">
         {/* Current turn */}
         <div className="bg-gradient-to-r from-cyan-900/50 to-slate-800/50 rounded-lg p-2 border-2 border-cyan-500">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs font-bold text-cyan-400">
-              Round {currentRound} (en cours)
+              {t('cricket.game.round')} {currentRound} ({t('cricket.game.inProgress')})
             </span>
             <span className="text-xs text-cyan-400">
-              {currentTurnHits.length} / 3 fléchettes
+              {currentTurnHits.length} / 3 {t('cricket.game.darts')}
             </span>
           </div>
           <div className="flex gap-1.5">
@@ -81,10 +84,10 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-bold text-cyan-400">
-                    Round {turn.round}
+                    {t('cricket.game.round')} {turn.round}
                   </span>
                   <span className="text-xs text-slate-400">
-                    {turn.hits.length} fléchettes
+                    {turn.hits.length} {t('cricket.game.darts')}
                   </span>
                 </div>
                 <div className="flex gap-1.5">
@@ -118,7 +121,7 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
           })
         ) : (
           <div className="text-slate-500 text-center py-4 text-sm">
-            Aucun tour complété
+            {t('cricket.game.noCompletedTurns')}
           </div>
         )}
       </div>

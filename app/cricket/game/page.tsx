@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Player,
   CricketGameMode,
@@ -14,6 +15,7 @@ import { useGranboardConnection } from "./hooks/useGranboardConnection";
 import { useCricketGameState } from "./hooks/useCricketGameState";
 import { usePlayerTurnHistory } from "./hooks/usePlayerTurnHistory";
 import { useSounds } from "./hooks/useSounds";
+import { useSettings } from "@/app/contexts/SettingsContext";
 
 // Components
 import { GameHeader } from "./components/GameHeader";
@@ -24,10 +26,11 @@ import { HitAnimation } from "./components/HitAnimation";
 import { TurnSummary } from "./components/TurnSummary";
 import { PlayerTurnHistory } from "./components/PlayerTurnHistory";
 import { LegendDialog } from "./components/LegendDialog";
-import { SettingsDialog } from "./components/SettingsDialog";
 
 export default function CricketGame() {
   const router = useRouter();
+  const t = useTranslations();
+  const { openDialog, closeDialog } = useSettings();
 
   // Animation states
   const [showTurnSummary, setShowTurnSummary] = useState(false);
@@ -38,10 +41,9 @@ export default function CricketGame() {
 
   // Dialog states
   const [showLegend, setShowLegend] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
 
   // Sound effects
-  const { playSound, enabled: soundEnabled, toggleSound, volume, changeVolume } = useSounds();
+  const { playSound } = useSounds();
 
   // Game state management
   const {
@@ -186,6 +188,33 @@ export default function CricketGame() {
     router.push("/");
   };
 
+  const handleShowSettings = () => {
+    const customContent = (
+      <div className="space-y-3">
+        <button
+          onClick={() => {
+            closeDialog();
+            handleNewGame();
+          }}
+          className="w-full px-6 py-4 bg-slate-700 text-white rounded-xl hover:bg-slate-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+        >
+          {t('cricket.game.newGame')}
+        </button>
+        <button
+          onClick={() => {
+            closeDialog();
+            handleQuit();
+          }}
+          className="w-full px-6 py-4 bg-red-700 text-white rounded-xl hover:bg-red-600 font-bold text-lg transition-all shadow-lg hover:scale-105"
+        >
+          {t('cricket.game.quit')}
+        </button>
+      </div>
+    );
+
+    openDialog(customContent);
+  };
+
   // Loading state
   if (!gameState) {
     return (
@@ -204,7 +233,7 @@ export default function CricketGame() {
         connectionState={connectionState}
         onConnect={connectToBoard}
         onShowLegend={() => setShowLegend(true)}
-        onShowSettings={() => setShowSettings(true)}
+        onShowSettings={handleShowSettings}
       />
 
       {gameState.gameFinished && gameState.winner && (
@@ -270,17 +299,6 @@ export default function CricketGame() {
         show={showLegend}
         gameMode={gameState.mode}
         onClose={() => setShowLegend(false)}
-      />
-
-      <SettingsDialog
-        show={showSettings}
-        onClose={() => setShowSettings(false)}
-        onNewGame={handleNewGame}
-        onQuit={handleQuit}
-        soundEnabled={soundEnabled}
-        volume={volume}
-        onVolumeChange={changeVolume}
-        onToggleSound={toggleSound}
       />
     </main>
   );

@@ -47,17 +47,20 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/bastiennoel93/granboard-app.git
 cd granboard-app
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Run the development server:
+
 ```bash
 pnpm dev
 ```
@@ -177,7 +180,7 @@ pnpm test:e2e:debug    # Debug mode
 - [ ] Add player profiles and statistics tracking
 - [ ] Implement game replay functionality
 - [ ] Add sound effects and animations
-- [ ] Support for multiple languages
+- [x] Support for multiple languages
 - [ ] Dark/light theme toggle
 
 ## Contributing

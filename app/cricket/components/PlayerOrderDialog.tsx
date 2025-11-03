@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Player } from "@/services/cricket";
 
 interface PlayerOrderDialogProps {
@@ -16,6 +17,7 @@ export function PlayerOrderDialog({
   onThrowForOrder,
   onClose,
 }: PlayerOrderDialogProps) {
+  const t = useTranslations();
   const [showManualOrder, setShowManualOrder] = useState(false);
   const [manualPlayers, setManualPlayers] = useState<Player[]>([...players]);
 
@@ -44,7 +46,7 @@ export function PlayerOrderDialog({
         <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">
-              Définir l&apos;ordre manuellement
+              {t('cricket.playerOrder.dialog.manualTitle')}
             </h2>
             <button
               onClick={() => setShowManualOrder(false)}
@@ -56,7 +58,7 @@ export function PlayerOrderDialog({
 
           <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
             <p className="text-sm text-blue-300">
-              Utilisez les flèches pour organiser l&apos;ordre des joueurs
+              {t('cricket.playerOrder.dialog.manualSubtitle')}
             </p>
           </div>
 
@@ -106,7 +108,7 @@ export function PlayerOrderDialog({
             onClick={handleValidateManualOrder}
             className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
           >
-            ✓ Valider l&apos;ordre
+            ✓ {t('cricket.playerOrder.dialog.confirm')}
           </button>
         </div>
       </div>
@@ -118,7 +120,7 @@ export function PlayerOrderDialog({
       <div className="bg-slate-800 rounded-2xl p-8 max-w-2xl w-full mx-4 border-2 border-green-500 shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-white">
-            Choisir l&apos;ordre des joueurs
+            {t('cricket.playerOrder.dialog.title')}
           </h2>
           <button
             onClick={onClose}
@@ -130,7 +132,7 @@ export function PlayerOrderDialog({
 
         <div className="mb-6 p-4 bg-blue-900/30 rounded-xl border border-blue-500/50">
           <p className="text-sm text-blue-300">
-            Comment souhaitez-vous déterminer l&apos;ordre des joueurs ?
+            {t('cricket.playerOrder.dialog.subtitle')}
           </p>
         </div>
 
@@ -145,9 +147,9 @@ export function PlayerOrderDialog({
             <div className="flex items-center gap-4">
               <span className="text-4xl">🎲</span>
               <div>
-                <div className="text-xl font-bold">Ordre aléatoire</div>
+                <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.randomOrder')}</div>
                 <div className="text-sm text-purple-200">
-                  Mélange automatique des joueurs
+                  {t('cricket.playerOrder.dialog.randomOrderDesc')}
                 </div>
               </div>
             </div>
@@ -163,9 +165,9 @@ export function PlayerOrderDialog({
             <div className="flex items-center gap-4">
               <span className="text-4xl">🎯</span>
               <div>
-                <div className="text-xl font-bold">Lancer pour l&apos;ordre</div>
+                <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.throwForOrder')}</div>
                 <div className="text-sm text-blue-200">
-                  Le score le plus élevé commence
+                  {t('cricket.playerOrder.dialog.throwForOrderDesc')}
                 </div>
               </div>
             </div>
@@ -178,9 +180,9 @@ export function PlayerOrderDialog({
             <div className="flex items-center gap-4">
               <span className="text-4xl">✏️</span>
               <div>
-                <div className="text-xl font-bold">Ordre manuel</div>
+                <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.manualOrder')}</div>
                 <div className="text-sm text-green-200">
-                  Définir l&apos;ordre vous-même
+                  {t('cricket.playerOrder.dialog.manualOrderDesc')}
                 </div>
               </div>
             </div>
@@ -196,9 +198,9 @@ export function PlayerOrderDialog({
             <div className="flex items-center gap-4">
               <span className="text-4xl">📋</span>
               <div>
-                <div className="text-xl font-bold">Ordre actuel</div>
+                <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.currentOrder')}</div>
                 <div className="text-sm text-slate-300">
-                  Conserver l&apos;ordre d&apos;ajout des joueurs
+                  {t('cricket.playerOrder.dialog.currentOrderDesc')}
                 </div>
               </div>
             </div>

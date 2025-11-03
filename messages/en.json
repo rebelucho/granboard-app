@@ -1,0 +1,177 @@
+{
+  "common": {
+    "back": "Back",
+    "add": "Add",
+    "remove": "Remove",
+    "start": "Start Game",
+    "bluetooth": "Bluetooth",
+    "connectionState": {
+      "waiting": "waiting",
+      "connecting": "connecting",
+      "connected": "connected",
+      "error": "error"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close",
+    "sound": {
+      "label": "Sound",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "volume": {
+      "label": "Volume",
+      "enableSoundFirst": "Enable sound to adjust volume"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "home": {
+    "title": "GRANBOARD",
+    "modes": {
+      "01": "01",
+      "cricket": "CRICKET"
+    }
+  },
+  "cricket": {
+    "title": "CRICKET",
+    "subtitle": "Setup",
+    "players": {
+      "title": "Players",
+      "placeholder": "Player name",
+      "count": "{count} player",
+      "count_plural": "{count} players",
+      "minRequired": "Add at least 2 players to start the game"
+    },
+    "gameMode": {
+      "title": "Game Mode",
+      "standard": {
+        "title": "Cricket Standard",
+        "description": "Score points for yourself"
+      },
+      "cutThroat": {
+        "title": "Cricket Cut Throat",
+        "description": "Give points to opponents"
+      }
+    },
+    "rounds": {
+      "title": "Number of Rounds",
+      "description": "rounds per game (each player throws 3 darts per round)"
+    },
+    "rules": {
+      "title": "Cricket {mode} Rules",
+      "mode": {
+        "standard": "Standard",
+        "cutThroat": "Cut Throat"
+      },
+      "common": [
+        "Targets: 15, 16, 17, 18, 19, 20 and Bull (25)",
+        "Close each target by hitting it 3 times",
+        "Single = 1 mark, Double = 2 marks, Triple = 3 marks"
+      ],
+      "standard": {
+        "title": "Standard Mode:",
+        "rules": [
+          "Score points for YOURSELF on your closed targets",
+          "Winner: Close all targets AND have the MOST points"
+        ]
+      },
+      "cutThroat": {
+        "title": "Cut Throat Mode:",
+        "rules": [
+          "Give points to OPPONENTS on your closed targets",
+          "Winner: Close all targets AND have the LEAST points"
+        ]
+      }
+    },
+    "errors": {
+      "minPlayers": "You need at least 2 players to start!",
+      "connectionFailed": "Failed to connect to Granboard. Make sure it's powered on and try again."
+    },
+    "game": {
+      "round": "Round",
+      "rounds": "rounds",
+      "scores": "Scores",
+      "currentPlayer": "Current Player",
+      "marks": "Marks",
+      "points": "Points",
+      "mpr": "MPR",
+      "undo": "Undo",
+      "quit": "Quit",
+      "settings": "Settings",
+      "legend": "Legend",
+      "gameOver": "Game Over",
+      "winner": "Winner",
+      "newGame": "New Game",
+      "dart": "Dart",
+      "darts": "darts",
+      "nextPlayer": "Next Player",
+      "undoLastMove": "Undo last move",
+      "nextPlayerTooltip": "Go to next player",
+      "showLegend": "Show legend",
+      "connected": "Connected",
+      "connecting": "Connecting...",
+      "errorRetry": "Error - Retry",
+      "connectGranboard": "Connect Granboard",
+      "turnCompleted": "Turn Completed",
+      "wonGame": "{name} won!",
+      "gameEndedAfter": "Game ended after {rounds} {roundsLabel}",
+      "gameStats": "Game Statistics",
+      "rank": "Rank",
+      "player": "Player",
+      "close": "Close",
+      "history": "History",
+      "inProgress": "in progress",
+      "noCompletedTurns": "No completed turns"
+    },
+    "legend": {
+      "title": "Legend",
+      "marksSymbols": "Mark Symbols",
+      "oneMark": "1 mark (Single)",
+      "twoMarks": "2 marks (Double)",
+      "closed": "Closed (3 marks)",
+      "closedByAll": "Closed by all",
+      "mprTitle": "MPR (Marks Per Round)",
+      "mprDesc": "Average number of marks per round. A good player reaches 3+ MPR.",
+      "single": "Single = 1 mark",
+      "double": "Double = 2 marks",
+      "triple": "Triple = 3 marks",
+      "standardTitle": "Standard Mode",
+      "standardDesc": "Close your numbers (3 marks) then score points by continuing to hit those numbers. The player with the most points wins!",
+      "cutThroatTitle": "Cut Throat Mode",
+      "cutThroatDesc": "Points (shown in red) are BAD! When you hit a number you've closed but your opponents haven't, you give them points. Close your targets quickly to avoid receiving points. The player with the LEAST points wins!",
+      "close": "Close"
+    },
+    "playerOrder": {
+      "dialog": {
+        "title": "Choose Player Order",
+        "subtitle": "How would you like to determine the player order?",
+        "throwForOrder": "Throw for Order",
+        "throwForOrderDesc": "Highest score goes first",
+        "manualOrder": "Manual Order",
+        "manualOrderDesc": "Set the order yourself",
+        "manualTitle": "Set Order Manually",
+        "manualSubtitle": "Use arrows to organize player order",
+        "confirm": "Confirm Order",
+        "randomOrder": "Random Order",
+        "randomOrderDesc": "Automatic player shuffle",
+        "currentOrder": "Current Order",
+        "currentOrderDesc": "Keep the order players were added"
+      },
+      "modal": {
+        "title": "Throw for Order",
+        "subtitle": "Each player throws one dart. Highest score goes first!",
+        "currentTurn": "{player}'s turn",
+        "waiting": "Waiting...",
+        "throwDart": "Throw your dart!",
+        "hit": "hit {segment}",
+        "score": "Score",
+        "results": "Throw Results",
+        "retry": "Retry",
+        "confirm": "Confirm Order"
+      }
+    }
+  }
+}

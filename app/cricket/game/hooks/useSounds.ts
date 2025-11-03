@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useSettings } from "@/app/contexts/SettingsContext";
 
 type SoundType =
   | "dart-hit"
@@ -11,8 +12,7 @@ type SoundType =
   | "bull";
 
 export function useSounds() {
-  const [enabled, setEnabled] = useState(true);
-  const [volume, setVolume] = useState(0.5); // Volume entre 0 et 1
+  const { volume, soundEnabled } = useSettings();
   const audioContextRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function useSounds() {
   }, []);
 
   const playBeep = (frequency: number, duration: number, baseVolume: number = 0.3) => {
-    if (!enabled || !audioContextRef.current) return;
+    if (!soundEnabled || !audioContextRef.current) return;
 
     const ctx = audioContextRef.current;
     const oscillator = ctx.createOscillator();
@@ -54,7 +54,7 @@ export function useSounds() {
   };
 
   const playChord = (frequencies: number[], duration: number, baseVolume: number = 0.2) => {
-    if (!enabled || !audioContextRef.current) return;
+    if (!soundEnabled || !audioContextRef.current) return;
 
     frequencies.forEach((freq) => {
       playBeep(freq, duration, baseVolume / frequencies.length);
@@ -62,7 +62,7 @@ export function useSounds() {
   };
 
   const playSound = (type: SoundType) => {
-    if (!enabled) return;
+    if (!soundEnabled) return;
 
     switch (type) {
       case "dart-hit":
@@ -114,21 +114,7 @@ export function useSounds() {
     }
   };
 
-  const toggleSound = () => {
-    setEnabled((prev) => !prev);
-  };
-
-  const changeVolume = (newVolume: number) => {
-    // Contraindre le volume entre 0 et 1
-    const clampedVolume = Math.max(0, Math.min(1, newVolume));
-    setVolume(clampedVolume);
-  };
-
   return {
     playSound,
-    enabled,
-    toggleSound,
-    volume,
-    changeVolume,
   };
 }
