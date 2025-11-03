@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="1200" height="630" fill="url(#grad)"/>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Large dartboard on the right -->
+  <g transform="translate(850, 315)">
+    <circle cx="0" cy="0" r="250" fill="#1e293b" opacity="0.5"/>
+    <circle cx="0" cy="0" r="220" fill="#334155" opacity="0.6"/>
+    <circle cx="0" cy="0" r="190" fill="#475569" opacity="0.7"/>
+    <circle cx="0" cy="0" r="160" fill="#1e293b"/>
+
+    <!-- Triple ring -->
+    <circle cx="0" cy="0" r="130" fill="#22d3ee" opacity="0.8"/>
+    <circle cx="0" cy="0" r="100" fill="#475569"/>
+
+    <!-- Bull -->
+    <circle cx="0" cy="0" r="50" fill="#06b6d4"/>
+    <circle cx="0" cy="0" r="25" fill="#22d3ee"/>
+  </g>
+
+  <!-- Dart -->
+  <g transform="translate(850, 100) rotate(45 0 0)">
+    <rect x="-15" y="-200" width="30" height="400" fill="#94a3b8" rx="5"/>
+    <polygon points="0,-200 -20,-150 20,-150" fill="#cbd5e1"/>
+    <path d="M -40,150 L -40,250 L 0,200 Z" fill="#22d3ee"/>
+    <path d="M 40,150 L 40,250 L 0,200 Z" fill="#06b6d4"/>
+    <rect x="-20" y="100" width="40" height="80" fill="#475569" rx="3"/>
+  </g>
+
+  <!-- Text content -->
+  <text x="80" y="240" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#ffffff">
+    GRANBOARD
+  </text>
+  <text x="80" y="320" font-family="Arial, sans-serif" font-size="48" fill="#22d3ee">
+    Application de fléchettes
+  </text>
+  <text x="80" y="400" font-family="Arial, sans-serif" font-size="36" fill="#94a3b8">
+    Cricket • 01 • Practice
+  </text>
+</svg>
