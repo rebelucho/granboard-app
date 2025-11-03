@@ -13,6 +13,7 @@ import { useGameHistory } from "./hooks/useGameHistory";
 import { useGranboardConnection } from "./hooks/useGranboardConnection";
 import { useCricketGameState } from "./hooks/useCricketGameState";
 import { usePlayerTurnHistory } from "./hooks/usePlayerTurnHistory";
+import { useSounds } from "./hooks/useSounds";
 
 // Components
 import { GameHeader } from "./components/GameHeader";
@@ -39,6 +40,9 @@ export default function CricketGame() {
   const [showLegend, setShowLegend] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
+  // Sound effects
+  const { playSound, enabled: soundEnabled, toggleSound, volume, changeVolume } = useSounds();
+
   // Game state management
   const {
     gameState,
@@ -57,6 +61,13 @@ export default function CricketGame() {
       // Add turn to player history
       if (gameState) {
         addTurn(playerState.player, gameState.currentRound, hits);
+      }
+
+      // Play sounds
+      if (isGameFinished) {
+        playSound("game-over");
+      } else {
+        playSound("player-change");
       }
 
       // Show turn summary when player finishes turn (except if game is finished)
@@ -94,9 +105,59 @@ export default function CricketGame() {
   // Player turn history
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
 
+  // Wrapper for segment hit with sound effects
+  const handleSegmentHitWithSound = (segment: any) => {
+    // Store previous state to check for number closure
+    const previousState = gameState ? { ...gameState } : null;
+    const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;
+
+    // Play sound based on segment type
+    if (segment.Section === 0) {
+      // Miss
+      playSound("dart-miss");
+    } else if (segment.Type === 3) {
+      // Triple
+      playSound("triple");
+    } else if (segment.Section === 25) {
+      // Bull
+      playSound("bull");
+    } else {
+      // Normal hit
+      playSound("dart-hit");
+    }
+
+    // Process the hit
+    onSegmentHit(segment);
+
+    // Check after state update if a number was closed
+    setTimeout(() => {
+      if (!previousState || !gameState) return;
+
+      const cricketNumbers = [15, 16, 17, 18, 19, 20, 25];
+      const hitNumber = segment.Section;
+
+      if (cricketNumbers.includes(hitNumber)) {
+        const previousMarks = previousState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
+        const newMarks = gameState.players[currentPlayerIndex].scores.get(hitNumber)?.marks ?? 0;
+
+        // Number just closed (went from < 3 to >= 3)
+        if (previousMarks < 3 && newMarks >= 3) {
+          // Check if all players have closed this number
+          const allClosed = gameState.players.every(p => (p.scores.get(hitNumber)?.marks ?? 0) >= 3);
+
+          if (allClosed) {
+            playSound("all-closed");
+          } else {
+            playSound("number-closed");
+          }
+        }
+      }
+    }, 100);
+  };
+
   // Granboard connection management
   const { connectionState, connectToBoard } =
-    useGranboardConnection(onSegmentHit);
+    useGranboardConnection(handleSegmentHitWithSound);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
@@ -216,6 +277,10 @@ export default function CricketGame() {
         onClose={() => setShowSettings(false)}
         onNewGame={handleNewGame}
         onQuit={handleQuit}
+        soundEnabled={soundEnabled}
+        volume={volume}
+        onVolumeChange={changeVolume}
+        onToggleSound={toggleSound}
       />
     </main>
   );
