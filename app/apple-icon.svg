@@ -1,0 +1,35 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="#0f172a"/>
+
+  <!-- Dartboard -->
+  <circle cx="90" cy="90" r="70" fill="#1e293b"/>
+  <circle cx="90" cy="90" r="63" fill="#334155"/>
+  <circle cx="90" cy="90" r="56" fill="#475569"/>
+  <circle cx="90" cy="90" r="49" fill="#1e293b"/>
+
+  <!-- Triple ring -->
+  <circle cx="90" cy="90" r="42" fill="#22d3ee"/>
+  <circle cx="90" cy="90" r="35" fill="#475569"/>
+  <circle cx="90" cy="90" r="28" fill="#1e293b"/>
+
+  <!-- Bull's eye -->
+  <circle cx="90" cy="90" r="14" fill="#06b6d4"/>
+  <circle cx="90" cy="90" r="7" fill="#22d3ee"/>
+
+  <!-- Dart -->
+  <g transform="translate(90, 35) rotate(45 0 0)">
+    <!-- Shaft -->
+    <rect x="-2.5" y="-28" width="5" height="56" fill="#94a3b8" rx="1"/>
+
+    <!-- Point -->
+    <polygon points="0,-28 -3,-21 3,-21" fill="#cbd5e1"/>
+
+    <!-- Flight -->
+    <path d="M -6,21 L -6,35 L 0,28 Z" fill="#22d3ee"/>
+    <path d="M 6,21 L 6,35 L 0,28 Z" fill="#06b6d4"/>
+
+    <!-- Grip -->
+    <rect x="-3" y="14" width="6" height="10" fill="#475569" rx="0.5"/>
+  </g>
+</svg>
