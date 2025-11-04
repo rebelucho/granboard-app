@@ -33,11 +33,11 @@ export function CurrentPlayerPanel({
             <span className="text-green-400">{currentPlayer.player.name}</span>
           </h2>
           <div className="flex gap-3 text-slate-300 text-sm">
-            <p>
+            <p data-testid="dart-counter">
               {t('cricket.game.dart')} <span className="font-bold text-white">{dartsThrown}</span> / 3
             </p>
             <span>•</span>
-            <p>
+            <p data-testid="round-counter">
               {t('cricket.game.round')} <span className="font-bold text-white">{currentRound}</span> /{" "}
               {maxRounds}
             </p>

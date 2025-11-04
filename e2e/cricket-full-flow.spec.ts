@@ -41,12 +41,12 @@ test.describe('Cricket Full Game Flow', () => {
     // 6. Vérifier que le scoreboard affiche tous les numéros Cricket
     const cricketNumbers = ['15', '16', '17', '18', '19', '20', 'Bull'];
     for (const num of cricketNumbers) {
-      await expect(page.getByText(num).first()).toBeVisible();
+      await expect(page.getByTestId(`cricket-number-${num}`)).toBeVisible();
     }
 
     // 7. Vérifier l'historique
-    await expect(page.getByText(/Historique/i)).toBeVisible();
-    await expect(page.getByText(/Tour 1/i).first()).toBeVisible();
+    await expect(page.getByTestId('history-title')).toBeVisible();
+    await expect(page.getByTestId('current-round-1')).toBeVisible();
 
     // 8. Simuler un changement de joueur
     const firstPlayer = await page.locator('h2 span.text-green-400').textContent();

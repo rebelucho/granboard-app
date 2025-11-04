@@ -15,14 +15,14 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
 
   return (
     <div className="bg-slate-900 rounded-xl shadow-2xl border-2 border-slate-700 h-full flex flex-col overflow-hidden">
-      <h3 className="text-lg font-bold text-white px-4 py-3 border-b-2 border-cyan-500 flex-shrink-0">
+      <h3 className="text-lg font-bold text-white px-4 py-3 border-b-2 border-cyan-500 flex-shrink-0" data-testid="history-title">
         {t('cricket.game.history')} - {player.name}
       </h3>
       <div className="overflow-y-auto flex-1 p-4 space-y-2">
         {/* Current turn */}
         <div className="bg-gradient-to-r from-cyan-900/50 to-slate-800/50 rounded-lg p-2 border-2 border-cyan-500">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-bold text-cyan-400">
+            <span className="text-xs font-bold text-cyan-400" data-testid={`current-round-${currentRound}`}>
               {t('cricket.game.round')} {currentRound} ({t('cricket.game.inProgress')})
             </span>
             <span className="text-xs text-cyan-400">
@@ -83,7 +83,7 @@ export function PlayerTurnHistory({ player, turns, currentTurnHits, currentRound
                 className="bg-slate-800/50 rounded-lg p-2 border border-slate-700"
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-bold text-cyan-400">
+                  <span className="text-xs font-bold text-cyan-400" data-testid={`completed-round-${turn.round}`}>
                     {t('cricket.game.round')} {turn.round}
                   </span>
                   <span className="text-xs text-slate-400">

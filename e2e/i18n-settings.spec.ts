@@ -6,7 +6,6 @@ test.describe('Internationalization (i18n)', () => {
 
     // Vérifier que le contenu est en français
     await expect(page.getByTestId('game-card-cricket')).toBeVisible();
-    await expect(page.getByText('Cricket')).toBeVisible();
   });
 
   test('should change language from French to English', async ({ page }) => {

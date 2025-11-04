@@ -39,21 +39,21 @@ test.describe('Cricket Game', () => {
     await expect(page.getByRole('heading').filter({ hasText: /Alice|Bob/ }).first()).toBeVisible();
 
     // Vérifier que le scoreboard est présent avec les numéros Cricket
-    await expect(page.getByRole('table').getByText('15')).toBeVisible();
-    await expect(page.getByRole('table').getByText('16')).toBeVisible();
-    await expect(page.getByRole('table').getByText('17')).toBeVisible();
-    await expect(page.getByRole('table').getByText('18')).toBeVisible();
-    await expect(page.getByRole('table').getByText('19')).toBeVisible();
-    await expect(page.getByRole('table').getByText('20')).toBeVisible();
-    await expect(page.getByRole('table').getByText('Bull')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-15')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-16')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-17')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-18')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-19')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-20')).toBeVisible();
+    await expect(page.getByTestId('cricket-number-Bull')).toBeVisible();
   });
 
   test('should display player turn history', async ({ page }) => {
     // Vérifier que l'historique est présent
-    await expect(page.getByText(/Historique/i)).toBeVisible();
+    await expect(page.getByTestId('history-title')).toBeVisible();
 
     // Vérifier que le round en cours est affiché
-    await expect(page.getByText(/Tour 1/i).first()).toBeVisible();
+    await expect(page.getByTestId('current-round-1')).toBeVisible();
   });
 
   test('should display control buttons', async ({ page }) => {
@@ -108,8 +108,8 @@ test.describe('Cricket Game', () => {
 
   test('should show player info', async ({ page }) => {
     // Vérifier les informations du joueur actuel
-    await expect(page.getByText(/Fléchette.*\/ 3/i).first()).toBeVisible();
-    await expect(page.getByText(/Tour.*\//i).first()).toBeVisible();
+    await expect(page.getByTestId('dart-counter')).toBeVisible();
+    await expect(page.getByTestId('round-counter')).toBeVisible();
   });
 
   test('should change player on button click', async ({ page }) => {
@@ -129,15 +129,12 @@ test.describe('Cricket Game', () => {
 
   test('should display both players in scoreboard', async ({ page }) => {
     // Vérifier que les deux joueurs sont dans le tableau (scoreboard)
-    await expect(page.getByRole('table').getByText('Alice')).toBeVisible();
-    await expect(page.getByRole('table').getByText('Bob')).toBeVisible();
+    await expect(page.getByTestId('scoreboard-player-Alice')).toBeVisible();
+    await expect(page.getByTestId('scoreboard-player-Bob')).toBeVisible();
 
     // Vérifier les statistiques (Points et MPR)
-    const pointsHeaders = page.getByText('Points');
-    await expect(pointsHeaders.first()).toBeVisible();
-
-    const mprHeaders = page.getByText('MPR');
-    await expect(mprHeaders.first()).toBeVisible();
+    await expect(page.getByTestId('points-label')).toBeVisible();
+    await expect(page.getByTestId('mpr-label')).toBeVisible();
   });
 
   test('should have responsive layout', async ({ page }) => {

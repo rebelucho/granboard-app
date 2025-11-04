@@ -83,6 +83,7 @@ export function ScoreBoard({
                 return (
                   <th
                     key={playerState.player.id}
+                    data-testid={`scoreboard-player-${playerState.player.name}`}
                     className={`p-2 text-center font-bold text-base min-w-[70px] ${
                       isCurrentPlayer && !gameFinished
                         ? "text-cyan-400 border-b-4 border-cyan-400"
@@ -108,6 +109,7 @@ export function ScoreBoard({
                 return (
                   <th
                     key={playerState.player.id}
+                    data-testid={`scoreboard-player-${playerState.player.name}`}
                     className={`p-2 text-center font-bold text-base min-w-[70px] ${
                       isCurrentPlayer && !gameFinished
                         ? "text-cyan-400 border-b-4 border-cyan-400"
@@ -139,6 +141,7 @@ export function ScoreBoard({
                   {leftPlayers.map((playerState) => renderPlayerCell(playerState, num))}
                   {/* Number column */}
                   <td
+                    data-testid={`cricket-number-${num === 25 ? 'Bull' : num}`}
                     className={`p-2 text-center font-bold text-xl border-x-2 border-slate-700 ${
                       allClosed ? "text-slate-500" : "text-white"
                     }`}
@@ -166,7 +169,7 @@ export function ScoreBoard({
                   {playerState.totalPoints}
                 </td>
               ))}
-              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700">
+              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700" data-testid="points-label">
                 Points
               </td>
               {rightPlayers.map((playerState) => (
@@ -192,7 +195,7 @@ export function ScoreBoard({
                   {calculateMPR(playerState).toFixed(2)}
                 </td>
               ))}
-              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700">
+              <td className="p-2 text-center font-bold text-white text-sm border-x-2 border-slate-700" data-testid="mpr-label">
                 MPR
               </td>
               {rightPlayers.map((playerState) => (
