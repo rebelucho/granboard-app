@@ -11,6 +11,7 @@ export function HitAnimation({ hit, onComplete }: HitAnimationProps) {
 
   useEffect(() => {
     if (hit) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow(true);
       const timer = setTimeout(() => {
         setShow(false);

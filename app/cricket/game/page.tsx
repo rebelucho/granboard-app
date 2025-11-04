@@ -45,6 +45,18 @@ export default function CricketGame() {
   // Sound effects
   const { playSound } = useSounds();
 
+  // Player turn history (declare first to use in callbacks)
+  const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
+
+  // Use refs to access latest values in callbacks
+  const addTurnRef = React.useRef(addTurn);
+  const gameStateRef = React.useRef<CricketGameState | null>(null);
+  const saveCurrentTurnHitsRef = React.useRef<((hits: Segment[]) => void) | null>(null);
+
+  React.useEffect(() => {
+    addTurnRef.current = addTurn;
+  }, [addTurn]);
+
   // Game state management
   const {
     gameState,
@@ -57,12 +69,14 @@ export default function CricketGame() {
   } = useCricketGameState(
     null,
     (hits) => {
-      saveCurrentTurnHits(hits);
+      if (saveCurrentTurnHitsRef.current) {
+        saveCurrentTurnHitsRef.current(hits);
+      }
     },
     (playerState, hits, isGameFinished) => {
       // Add turn to player history
-      if (gameState) {
-        addTurn(playerState.player, gameState.currentRound, hits);
+      if (gameStateRef.current) {
+        addTurnRef.current(playerState.player, gameStateRef.current.currentRound, hits);
       }
 
       // Play sounds
@@ -79,6 +93,11 @@ export default function CricketGame() {
       }
     }
   );
+
+  // Update refs when gameState changes
+  React.useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   // Initialize game state from session storage
   useEffect(() => {
@@ -104,8 +123,10 @@ export default function CricketGame() {
     currentTurnHits
   );
 
-  // Player turn history
-  const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
+  // Update saveCurrentTurnHits ref
+  React.useEffect(() => {
+    saveCurrentTurnHitsRef.current = saveCurrentTurnHits;
+  }, [saveCurrentTurnHits]);
 
   // Wrapper for segment hit with sound effects
   const handleSegmentHitWithSound = (segment: any) => {
@@ -164,8 +185,10 @@ export default function CricketGame() {
   // Close turn summary when next player throws a dart
   useEffect(() => {
     if (lastHit && showTurnSummary) {
+      /* eslint-disable react-hooks/set-state-in-effect */
       setShowTurnSummary(false);
       setTurnSummaryData(null);
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [lastHit, showTurnSummary]);
 

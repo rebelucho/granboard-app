@@ -25,13 +25,14 @@ export function useGranboardConnection(
     };
 
     tryAutoConnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty deps - only run on mount
 
   // Update granboard callback when onSegmentHit changes
   useEffect(() => {
     if (granboard && onSegmentHit) {
+      /* eslint-disable react-hooks/immutability */
       granboard.segmentHitCallback = onSegmentHit;
+      /* eslint-enable react-hooks/immutability */
     }
   }, [granboard, onSegmentHit]);
 
