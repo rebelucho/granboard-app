@@ -3,6 +3,7 @@ updates:
   # Surveillance des packages npm/pnpm
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -70,6 +71,7 @@ updates:
   # Surveillance des GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "monthly"
     labels:
