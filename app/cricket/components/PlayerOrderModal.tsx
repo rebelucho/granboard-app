@@ -39,7 +39,9 @@ export function PlayerOrderModal({
 
   // Update callback when currentPlayerIndex changes
   useEffect(() => {
+    /* eslint-disable react-hooks/immutability */
     granboard.segmentHitCallback = (segment: Segment) => {
+      /* eslint-enable react-hooks/immutability */
       // Ignore reset button
       if (segment.ID === SegmentID.RESET_BUTTON) return;
 

@@ -30,6 +30,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     const savedSoundEnabled = localStorage.getItem('granboard_sound_enabled');
     const shouldReopenSettings = localStorage.getItem('granboard_reopen_settings');
 
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (savedVolume) {
       setVolumeState(parseFloat(savedVolume));
     }
@@ -42,6 +43,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('granboard_reopen_settings');
       setIsDialogOpen(true);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   const setVolume = useCallback((newVolume: number) => {

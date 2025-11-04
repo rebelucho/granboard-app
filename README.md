@@ -4,7 +4,7 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
 
 [![CI/CD](https://github.com/bastiennoel93/granboard-app/actions/workflows/ci.yml/badge.svg)](https://github.com/bastiennoel93/granboard-app/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
 ## Features
@@ -129,7 +129,7 @@ pnpm test:e2e:debug   # Debug E2E tests
 
 ### Key Technologies
 
-- **Framework:** [Next.js 14](https://nextjs.org/) - React framework with App Router
+- **Framework:** [Next.js 16](https://nextjs.org/) - React framework with App Router
 - **Language:** [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - **Bluetooth:** [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API) - Direct device communication
