@@ -8,6 +8,8 @@ import { PlayerOrderModal } from "./components/PlayerOrderModal";
 import { PlayerOrderDialog } from "./components/PlayerOrderDialog";
 import { Granboard } from "@/services/granboard";
 import { useSettings } from "../contexts/SettingsContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faGear } from "@fortawesome/free-solid-svg-icons";
 
 export default function CricketSetup() {
   const router = useRouter();
@@ -100,9 +102,9 @@ export default function CricketSetup() {
       <button
         data-testid="back-button"
         onClick={() => router.push("/")}
-        className="absolute top-6 left-6 px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all"
+        className="absolute top-6 left-6 px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
       >
-        ← {t('common.back')}
+        <FontAwesomeIcon icon={faArrowLeft} /> {t('common.back')}
       </button>
 
       {/* Settings Button - Top Right */}
@@ -112,7 +114,7 @@ export default function CricketSetup() {
           onClick={() => openDialog()}
           className="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
         >
-          ⚙️ {t('cricket.game.settings')}
+          <FontAwesomeIcon icon={faGear} /> {t('cricket.game.settings')}
         </button>
       </div>
 

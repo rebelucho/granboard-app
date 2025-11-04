@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 import { CricketGameMode } from "@/services/cricket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faChartBar, faBullseye, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 interface LegendDialogProps {
   show: boolean;
@@ -22,7 +24,7 @@ export function LegendDialog({ show, gameMode, onClose }: LegendDialogProps) {
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
-            ✕
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -51,8 +53,8 @@ export function LegendDialog({ show, gameMode, onClose }: LegendDialogProps) {
           </div>
 
           <div className="p-3 md:p-4 bg-slate-800/50 rounded-xl border border-cyan-500/30">
-            <p className="text-sm md:text-base text-cyan-400 font-bold mb-2">
-              📊 {t('cricket.legend.mprTitle')}
+            <p className="text-sm md:text-base text-cyan-400 font-bold mb-2 flex items-center gap-2">
+              <FontAwesomeIcon icon={faChartBar} /> {t('cricket.legend.mprTitle')}
             </p>
             <p className="text-xs md:text-sm text-slate-300">
               {t('cricket.legend.mprDesc')}
@@ -65,8 +67,8 @@ export function LegendDialog({ show, gameMode, onClose }: LegendDialogProps) {
           </div>
 
           <div className="p-3 md:p-4 bg-slate-800/50 rounded-xl border border-blue-500/30">
-            <p className="text-sm md:text-base text-blue-400 font-bold mb-2">
-              🎯 {t('cricket.legend.standardTitle')}
+            <p className="text-sm md:text-base text-blue-400 font-bold mb-2 flex items-center gap-2">
+              <FontAwesomeIcon icon={faBullseye} /> {t('cricket.legend.standardTitle')}
             </p>
             <p className="text-xs md:text-sm text-slate-300">
               {t('cricket.legend.standardDesc')}
@@ -75,8 +77,8 @@ export function LegendDialog({ show, gameMode, onClose }: LegendDialogProps) {
 
           {gameMode === CricketGameMode.CutThroat && (
             <div className="p-3 md:p-4 bg-slate-800/50 rounded-xl border border-red-500/30">
-              <p className="text-sm md:text-base text-red-400 font-bold mb-2">
-                ⚠️ {t('cricket.legend.cutThroatTitle')}
+              <p className="text-sm md:text-base text-red-400 font-bold mb-2 flex items-center gap-2">
+                <FontAwesomeIcon icon={faTriangleExclamation} /> {t('cricket.legend.cutThroatTitle')}
               </p>
               <p className="text-xs md:text-sm text-slate-300">
                 {t('cricket.legend.cutThroatDesc')}

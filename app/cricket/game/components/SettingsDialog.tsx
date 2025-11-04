@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faVolumeHigh, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
+
 interface SettingsDialogProps {
   show: boolean;
   onClose: () => void;
@@ -35,7 +38,7 @@ export function SettingsDialog({
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
-            ✕
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -44,8 +47,8 @@ export function SettingsDialog({
           {onToggleSound && (
             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
               <div className="flex items-center justify-between">
-                <label className="text-white font-bold text-base">
-                  {soundEnabled ? "🔊" : "🔇"} Son
+                <label className="text-white font-bold text-base flex items-center gap-2">
+                  <FontAwesomeIcon icon={soundEnabled ? faVolumeHigh : faVolumeMute} /> Son
                 </label>
                 <button
                   onClick={onToggleSound}
@@ -65,8 +68,8 @@ export function SettingsDialog({
           {onVolumeChange && (
             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
               <div className="flex items-center justify-between mb-3">
-                <label className="text-white font-bold text-base">
-                  🔊 Volume
+                <label className="text-white font-bold text-base flex items-center gap-2">
+                  <FontAwesomeIcon icon={faVolumeHigh} /> Volume
                 </label>
                 <span className="text-cyan-400 font-bold text-sm">
                   {Math.round(volume * 100)}%

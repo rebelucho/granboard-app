@@ -3,6 +3,8 @@
 import { useSettings } from "@/app/contexts/SettingsContext";
 import { LanguageSelector } from "./LanguageSelector";
 import { useTranslations } from "next-intl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faVolumeHigh, faVolumeMute, faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 export function GlobalSettingsDialog() {
   const { isDialogOpen, closeDialog, volume, soundEnabled, setVolume, toggleSound, customContent } = useSettings();
@@ -26,7 +28,7 @@ export function GlobalSettingsDialog() {
             onClick={closeDialog}
             className="text-slate-400 hover:text-white text-2xl font-bold px-3 py-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
-            ✕
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -36,8 +38,8 @@ export function GlobalSettingsDialog() {
           {/* Sound Control */}
           <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
             <div className="flex items-center justify-between">
-              <label className="text-white font-bold text-base">
-                {soundEnabled ? "🔊" : "🔇"} {t('settings.sound.label')}
+              <label className="text-white font-bold text-base flex items-center gap-2">
+                <FontAwesomeIcon icon={soundEnabled ? faVolumeHigh : faVolumeMute} /> {t('settings.sound.label')}
               </label>
               <button
                 data-testid="sound-toggle-button"
@@ -56,8 +58,8 @@ export function GlobalSettingsDialog() {
           {/* Volume Control */}
           <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
             <div className="flex items-center justify-between mb-3">
-              <label className="text-white font-bold text-base">
-                🔊 {t('settings.volume.label')}
+              <label className="text-white font-bold text-base flex items-center gap-2">
+                <FontAwesomeIcon icon={faVolumeHigh} /> {t('settings.volume.label')}
               </label>
               <span className="text-cyan-400 font-bold text-sm">
                 {Math.round(volume * 100)}%
@@ -99,8 +101,8 @@ export function GlobalSettingsDialog() {
           {/* Language Selector */}
           <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
             <div className="flex items-center justify-between">
-              <label className="text-white font-bold text-base">
-                🌍 {t('settings.language.label')}
+              <label className="text-white font-bold text-base flex items-center gap-2">
+                <FontAwesomeIcon icon={faGlobe} /> {t('settings.language.label')}
               </label>
               <LanguageSelector />
             </div>

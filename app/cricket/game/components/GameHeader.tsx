@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 import { CricketGameMode } from "@/services/cricket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faGear, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
 
@@ -41,25 +43,25 @@ export function GameHeader({
           <button
             data-testid="legend-button"
             onClick={onShowLegend}
-            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
+            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg flex items-center gap-2"
             title={t('cricket.game.showLegend')}
           >
-            📖 {t('cricket.game.legend')}
+            <FontAwesomeIcon icon={faBook} /> {t('cricket.game.legend')}
           </button>
         )}
         {onShowSettings && (
           <button
             data-testid="settings-button"
             onClick={onShowSettings}
-            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
+            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg flex items-center gap-2"
             title={t('cricket.game.settings')}
           >
-            ⚙️ {t('cricket.game.settings')}
+            <FontAwesomeIcon icon={faGear} /> {t('cricket.game.settings')}
           </button>
         )}
         {connectionState === "connecté" ? (
-          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
-            ✓ {t('cricket.game.connected')}
+          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg flex items-center gap-2">
+            <FontAwesomeIcon icon={faCheck} /> {t('cricket.game.connected')}
           </div>
         ) : (
           <button

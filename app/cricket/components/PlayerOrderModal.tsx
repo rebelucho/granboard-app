@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { Player } from "@/services/cricket";
 import { Segment, SegmentID } from "@/services/boardinfo";
 import { Granboard } from "@/services/granboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark, faRotateRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 interface PlayerOrderModalProps {
   players: Player[];
@@ -91,7 +93,7 @@ export function PlayerOrderModal({
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl"
           >
-            ×
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -156,15 +158,15 @@ export function PlayerOrderModal({
           <div className="flex gap-3">
             <button
               onClick={handleReset}
-              className="flex-1 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-500 hover:to-orange-600 transition-all font-bold text-xl shadow-lg"
+              className="flex-1 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-500 hover:to-orange-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
-              🔄 {t('cricket.playerOrder.modal.retry')}
+              <FontAwesomeIcon icon={faRotateRight} /> {t('cricket.playerOrder.modal.retry')}
             </button>
             <button
               onClick={handleFinish}
-              className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
+              className="flex-1 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
-              ✓ {t('cricket.playerOrder.modal.confirm')}
+              <FontAwesomeIcon icon={faCheck} /> {t('cricket.playerOrder.modal.confirm')}
             </button>
           </div>
         )}

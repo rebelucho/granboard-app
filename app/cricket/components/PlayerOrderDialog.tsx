@@ -3,6 +3,18 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Player } from "@/services/cricket";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDice,
+  faBullseye,
+  faPencil,
+  faClipboardList,
+  faCheck,
+  faXmark,
+  faArrowLeft,
+  faArrowUp,
+  faArrowDown
+} from "@fortawesome/free-solid-svg-icons";
 
 interface PlayerOrderDialogProps {
   players: Player[];
@@ -52,7 +64,7 @@ export function PlayerOrderDialog({
               onClick={() => setShowManualOrder(false)}
               className="text-slate-400 hover:text-white text-2xl"
             >
-              ←
+              <FontAwesomeIcon icon={faArrowLeft} />
             </button>
           </div>
 
@@ -86,7 +98,7 @@ export function PlayerOrderDialog({
                         : "bg-blue-600 text-white hover:bg-blue-500"
                     }`}
                   >
-                    ↑
+                    <FontAwesomeIcon icon={faArrowUp} />
                   </button>
                   <button
                     onClick={() => movePlayer(index, "down")}
@@ -97,7 +109,7 @@ export function PlayerOrderDialog({
                         : "bg-blue-600 text-white hover:bg-blue-500"
                     }`}
                   >
-                    ↓
+                    <FontAwesomeIcon icon={faArrowDown} />
                   </button>
                 </div>
               </div>
@@ -106,9 +118,9 @@ export function PlayerOrderDialog({
 
           <button
             onClick={handleValidateManualOrder}
-            className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg"
+            className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all font-bold text-xl shadow-lg flex items-center justify-center gap-2"
           >
-            ✓ {t('cricket.playerOrder.dialog.confirm')}
+            <FontAwesomeIcon icon={faCheck} /> {t('cricket.playerOrder.dialog.confirm')}
           </button>
         </div>
       </div>
@@ -126,7 +138,7 @@ export function PlayerOrderDialog({
             onClick={onClose}
             className="text-slate-400 hover:text-white text-2xl"
           >
-            ×
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
 
@@ -146,7 +158,7 @@ export function PlayerOrderDialog({
             className="w-full p-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-500 hover:to-purple-600 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">🎲</span>
+              <FontAwesomeIcon icon={faDice} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.randomOrder')}</div>
                 <div className="text-sm text-purple-200">
@@ -165,7 +177,7 @@ export function PlayerOrderDialog({
             className="w-full p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">🎯</span>
+              <FontAwesomeIcon icon={faBullseye} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.throwForOrder')}</div>
                 <div className="text-sm text-blue-200">
@@ -181,7 +193,7 @@ export function PlayerOrderDialog({
             className="w-full p-6 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-500 hover:to-green-600 transition-all shadow-lg text-left"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">✏️</span>
+              <FontAwesomeIcon icon={faPencil} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.manualOrder')}</div>
                 <div className="text-sm text-green-200">
@@ -200,7 +212,7 @@ export function PlayerOrderDialog({
             className="w-full p-6 bg-slate-700 text-white rounded-xl hover:bg-slate-600 transition-all shadow-lg text-left border-2 border-slate-600"
           >
             <div className="flex items-center gap-4">
-              <span className="text-4xl">📋</span>
+              <FontAwesomeIcon icon={faClipboardList} className="text-4xl w-12 h-12" />
               <div>
                 <div className="text-xl font-bold">{t('cricket.playerOrder.dialog.currentOrder')}</div>
                 <div className="text-sm text-slate-300">
