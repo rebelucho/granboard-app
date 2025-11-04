@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Segment } from "@/services/boardinfo";
 import { PlayerCricketState } from "@/services/cricket";
 import { useEffect, useState } from "react";
@@ -15,10 +16,12 @@ export function TurnSummary({
   hits,
   onComplete,
 }: TurnSummaryProps) {
+  const t = useTranslations();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (show) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
@@ -43,7 +46,7 @@ export function TurnSummary({
             <h2 className="text-4xl font-bold text-blue-400 mb-2">
               {currentPlayer.player.name}
             </h2>
-            <div className="text-xl text-slate-300">Tour terminé</div>
+            <div className="text-xl text-slate-300">{t('cricket.game.turnCompleted')}</div>
           </div>
 
           {/* Hits */}

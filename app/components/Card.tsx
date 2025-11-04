@@ -17,6 +17,7 @@ export const GameCard: React.FC<GameCardProps> = ({
   return (
     <Link
       href={href}
+      data-testid={`game-card-${category}`}
       className={`w-full ${bgColor} border border-gray-200 rounded-lg shadow p-5 text-center`}
     >
       <h5 className="text-2xl font-bold tracking-tight text-gray-900">

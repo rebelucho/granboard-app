@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Segment } from "@/services/boardinfo";
 import { PlayerState } from "@/services/cricket";
 
@@ -22,6 +23,8 @@ export function CurrentPlayerPanel({
   onUndo,
   onNextPlayer,
 }: CurrentPlayerPanelProps) {
+  const t = useTranslations();
+
   return (
     <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl shadow-2xl p-4 border border-slate-700">
       <div className="flex justify-between items-center gap-4">
@@ -30,18 +33,19 @@ export function CurrentPlayerPanel({
             <span className="text-green-400">{currentPlayer.player.name}</span>
           </h2>
           <div className="flex gap-3 text-slate-300 text-sm">
-            <p>
-              Fléchette <span className="font-bold text-white">{dartsThrown}</span> / 3
+            <p data-testid="dart-counter">
+              {t('cricket.game.dart')} <span className="font-bold text-white">{dartsThrown}</span> / 3
             </p>
             <span>•</span>
-            <p>
-              Tour <span className="font-bold text-white">{currentRound}</span> /{" "}
+            <p data-testid="round-counter">
+              {t('cricket.game.round')} <span className="font-bold text-white">{currentRound}</span> /{" "}
               {maxRounds}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <button
+            data-testid="undo-button"
             onClick={onUndo}
             disabled={!hasHistory}
             className={`px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-lg ${
@@ -49,16 +53,17 @@ export function CurrentPlayerPanel({
                 ? "bg-slate-700 text-slate-500 cursor-not-allowed"
                 : "bg-orange-600 text-white hover:bg-orange-500 hover:scale-105"
             }`}
-            title="Annuler le dernier coup"
+            title={t('cricket.game.undoLastMove')}
           >
-            ↶ Annuler
+            ↶ {t('cricket.game.undo')}
           </button>
           <button
+            data-testid="next-player-button"
             onClick={onNextPlayer}
             className="px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-lg bg-red-600 text-white hover:bg-red-500 hover:scale-105"
-            title="Passer au joueur suivant"
+            title={t('cricket.game.nextPlayerTooltip')}
           >
-            🔴 Joueur suivant
+            🔴 {t('cricket.game.nextPlayer')}
           </button>
         </div>
       </div>

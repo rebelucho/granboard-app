@@ -8,14 +8,14 @@ test.describe('Home Page', () => {
     await expect(page).toHaveTitle(/Granboard/);
 
     // Vérifier que les cartes de jeu sont présentes
-    await expect(page.getByText('Cricket')).toBeVisible();
+    await expect(page.getByTestId('game-card-cricket')).toBeVisible();
   });
 
   test('should navigate to cricket setup page', async ({ page }) => {
     await page.goto('/');
 
     // Cliquer sur la carte Cricket
-    await page.getByText('Cricket').click();
+    await page.getByTestId('game-card-cricket').click();
 
     // Vérifier qu'on est sur la page de configuration Cricket
     await expect(page).toHaveURL(/\/cricket/);

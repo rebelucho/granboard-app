@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { CricketGameMode } from "@/services/cricket";
 
 type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
@@ -17,6 +18,8 @@ export function GameHeader({
   onShowLegend,
   onShowSettings,
 }: GameHeaderProps) {
+  const t = useTranslations();
+
   return (
     <div className="flex justify-between items-center">
       <div>
@@ -24,11 +27,11 @@ export function GameHeader({
           CRICKET
           {gameMode === CricketGameMode.CutThroat ? (
             <span className="text-red-400 font-semibold text-base ml-3">
-              Cut Throat
+              {t('cricket.gameMode.cutThroat.title')}
             </span>
           ) : (
             <span className="text-blue-400 font-semibold text-base ml-3">
-              Standard
+              {t('cricket.gameMode.standard.title')}
             </span>
           )}
         </h1>
@@ -36,37 +39,40 @@ export function GameHeader({
       <div className="flex gap-3">
         {onShowLegend && (
           <button
+            data-testid="legend-button"
             onClick={onShowLegend}
             className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
-            title="Afficher la légende"
+            title={t('cricket.game.showLegend')}
           >
-            📖 Légende
+            📖 {t('cricket.game.legend')}
           </button>
         )}
         {onShowSettings && (
           <button
+            data-testid="settings-button"
             onClick={onShowSettings}
             className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 text-sm font-medium transition-all shadow-lg"
-            title="Paramètres"
+            title={t('cricket.game.settings')}
           >
-            ⚙️ Paramètres
+            ⚙️ {t('cricket.game.settings')}
           </button>
         )}
         {connectionState === "connecté" ? (
-          <div className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
-            ✓ Connecté
+          <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg">
+            ✓ {t('cricket.game.connected')}
           </div>
         ) : (
           <button
+            data-testid="connect-button"
             onClick={onConnect}
             disabled={connectionState === "connexion"}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 text-sm font-medium disabled:bg-slate-700 transition-all shadow-lg"
           >
             {connectionState === "connexion"
-              ? "Connexion..."
+              ? t('cricket.game.connecting')
               : connectionState === "erreur"
-              ? "Erreur - Réessayer"
-              : "Connecter Granboard"}
+              ? t('cricket.game.errorRetry')
+              : t('cricket.game.connectGranboard')}
           </button>
         )}
       </div>
