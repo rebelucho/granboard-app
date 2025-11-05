@@ -2,7 +2,18 @@
 
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+}
+
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
 }
 
 /* Light Theme Variables (Default) */
@@ -99,39 +110,91 @@ body {
   }
 
   /* Theme-aware utility classes */
-  .bg-theme-primary { background-color: rgb(var(--bg-primary)); }
-  .bg-theme-secondary { background-color: rgb(var(--bg-secondary)); }
-  .bg-theme-tertiary { background-color: rgb(var(--bg-tertiary)); }
-  .bg-theme-elevated { background-color: rgb(var(--bg-elevated)); }
-  .bg-theme-elevated-alpha { background-color: var(--bg-elevated-alpha); }
+  .bg-theme-primary {
+    background-color: rgb(var(--bg-primary));
+  }
+  .bg-theme-secondary {
+    background-color: rgb(var(--bg-secondary));
+  }
+  .bg-theme-tertiary {
+    background-color: rgb(var(--bg-tertiary));
+  }
+  .bg-theme-elevated {
+    background-color: rgb(var(--bg-elevated));
+  }
+  .bg-theme-elevated-alpha {
+    background-color: var(--bg-elevated-alpha);
+  }
 
-  .text-theme-primary { color: rgb(var(--text-primary)); }
-  .text-theme-secondary { color: rgb(var(--text-secondary)); }
-  .text-theme-tertiary { color: rgb(var(--text-tertiary)); }
-  .text-theme-muted { color: rgb(var(--text-muted)); }
+  .text-theme-primary {
+    color: rgb(var(--text-primary));
+  }
+  .text-theme-secondary {
+    color: rgb(var(--text-secondary));
+  }
+  .text-theme-tertiary {
+    color: rgb(var(--text-tertiary));
+  }
+  .text-theme-muted {
+    color: rgb(var(--text-muted));
+  }
 
-  .border-theme-primary { border-color: rgb(var(--border-primary)); }
-  .border-theme-secondary { border-color: rgb(var(--border-secondary)); }
+  .border-theme-primary {
+    border-color: rgb(var(--border-primary));
+  }
+  .border-theme-secondary {
+    border-color: rgb(var(--border-secondary));
+  }
 
-  .bg-theme-interactive { background-color: rgb(var(--interactive-bg)); }
-  .bg-theme-interactive-hover:hover { background-color: rgb(var(--interactive-bg-hover)); }
-  .text-theme-interactive { color: rgb(var(--interactive-text)); }
+  .bg-theme-interactive {
+    background-color: rgb(var(--interactive-bg));
+  }
+  .bg-theme-interactive-hover:hover {
+    background-color: rgb(var(--interactive-bg-hover));
+  }
+  .text-theme-interactive {
+    color: rgb(var(--interactive-text));
+  }
 
-  .bg-theme-input { background-color: rgb(var(--input-bg)); }
-  .border-theme-input { border-color: rgb(var(--input-border)); }
-  .text-theme-input { color: rgb(var(--input-text)); }
-  .placeholder-theme-input::placeholder { color: rgb(var(--input-placeholder)); }
+  .bg-theme-input {
+    background-color: rgb(var(--input-bg));
+  }
+  .border-theme-input {
+    border-color: rgb(var(--input-border));
+  }
+  .text-theme-input {
+    color: rgb(var(--input-text));
+  }
+  .placeholder-theme-input::placeholder {
+    color: rgb(var(--input-placeholder));
+  }
 
-  .bg-theme-card { background-color: rgb(var(--card-bg)); }
-  .bg-theme-card-alpha { background-color: var(--card-bg-alpha); }
-  .border-theme-card { border-color: rgb(var(--card-border)); }
+  .bg-theme-card {
+    background-color: rgb(var(--card-bg));
+  }
+  .bg-theme-card-alpha {
+    background-color: var(--card-bg-alpha);
+  }
+  .border-theme-card {
+    border-color: rgb(var(--card-border));
+  }
 
   /* Accent color utility classes */
-  .text-accent { color: rgb(var(--accent-text)); }
-  .bg-accent { background-color: rgb(var(--accent)); }
-  .bg-accent-bg { background-color: var(--accent-bg); }
-  .border-accent { border-color: rgb(var(--accent)); }
-  .ring-accent { --tw-ring-color: rgb(var(--accent)); }
+  .text-accent {
+    color: rgb(var(--accent-text));
+  }
+  .bg-accent {
+    background-color: rgb(var(--accent));
+  }
+  .bg-accent-bg {
+    background-color: var(--accent-bg);
+  }
+  .border-accent {
+    border-color: rgb(var(--accent));
+  }
+  .ring-accent {
+    --tw-ring-color: rgb(var(--accent));
+  }
 
   .bg-theme-gradient {
     background-color: rgb(var(--bg-primary));

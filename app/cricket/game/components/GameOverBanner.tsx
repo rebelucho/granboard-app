@@ -71,27 +71,27 @@ export function GameOverBanner({
       </p>
 
       {/* Statistics Table */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 mb-6">
+      <div className="bg-theme-card backdrop-blur-sm rounded-xl p-6 mb-6">
         <h3 className="text-2xl font-bold text-theme-primary mb-4 text-center">
           {isCricket ? t('cricket.game.gameStats') : t('zeroOne.game.gameStats')}
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b-2 border-theme-secondary">
-                <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.rank')}</th>
-                <th className="p-3 text-left font-bold text-theme-secondary">{t('cricket.game.player')}</th>
+              <tr className="border-b-2 border-theme-tertiary">
+                <th className="p-3 text-left font-bold text-theme-tertiary">{t('cricket.game.rank')}</th>
+                <th className="p-3 text-left font-bold text-theme-tertiary">{t('cricket.game.player')}</th>
                 {isCricket ? (
                   <>
-                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.points')}</th>
-                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.marks')}</th>
-                    <th className="p-3 text-center font-bold text-theme-secondary">{t('cricket.game.mpr')}</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">{t('cricket.game.points')}</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">{t('cricket.game.marks')}</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">{t('cricket.game.mpr')}</th>
                   </>
                 ) : (
                   <>
-                    <th className="p-3 text-center font-bold text-theme-secondary">{t('zeroOne.game.remaining')}</th>
-                    <th className="p-3 text-center font-bold text-theme-secondary">{t('zeroOne.game.average')}</th>
-                    <th className="p-3 text-center font-bold text-theme-secondary">PPD</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">{t('zeroOne.game.remaining')}</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">{t('zeroOne.game.average')}</th>
+                    <th className="p-3 text-center font-bold text-theme-tertiary">PPD</th>
                   </>
                 )}
               </tr>
@@ -102,8 +102,8 @@ export function GameOverBanner({
                 return (
                   <tr
                     key={playerState.player.id}
-                    className={`border-b border-theme-primary ${
-                      isWinner ? "bg-yellow-100" : ""
+                    className={`border-b border-theme-tertiary ${
+                      isWinner ? "bg-yellow-500/20" : ""
                     }`}
                   >
                     <td className="p-3 text-center">
@@ -136,7 +136,7 @@ export function GameOverBanner({
                         >
                           {playerState.totalPoints}
                         </td>
-                        <td className="p-3 text-center font-semibold text-theme-secondary">
+                        <td className="p-3 text-center font-semibold text-theme-primary">
                           {playerState.totalMarks}
                         </td>
                         <td className="p-3 text-center font-bold text-accent text-lg">
@@ -148,7 +148,7 @@ export function GameOverBanner({
                         <td className="p-3 text-center font-bold text-accent">
                           {playerState.currentScore}
                         </td>
-                        <td className="p-3 text-center font-semibold text-theme-secondary">
+                        <td className="p-3 text-center font-semibold text-theme-primary">
                           {calculateAverage(playerState).toFixed(2)}
                         </td>
                         <td className="p-3 text-center font-bold text-accent text-lg">
