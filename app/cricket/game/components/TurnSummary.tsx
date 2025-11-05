@@ -34,7 +34,7 @@ export function TurnSummary({
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-[9999] pointer-events-none">
+    <div data-testid="turn-summary" className="fixed inset-0 flex items-center justify-center z-[9999] pointer-events-none">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/60 animate-fade-in" />
 

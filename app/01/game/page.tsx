@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { SEGMENT_SECTIONS, SEGMENT_TYPES } from "@/constants/segments";
+import { ANIMATION_TIMINGS } from "@/constants/animations";
 import {
   Player,
   ZeroOneMode,
@@ -20,6 +22,7 @@ import { useZeroOneGameState } from "./hooks/useZeroOneGameState";
 import { usePlayerTurnHistory } from "../../cricket/game/hooks/usePlayerTurnHistory";
 import { useSounds } from "../../cricket/game/hooks/useSounds";
 import { useSettings } from "@/app/contexts/SettingsContext";
+import { useAnimations } from "@/app/hooks/useAnimations";
 
 // Components
 import { GameHeader } from "../../cricket/game/components/GameHeader";
@@ -46,6 +49,9 @@ export default function ZeroOneGame() {
 
   // Sound effects
   const { playSound } = useSounds();
+
+  // Animations
+  const { playAnimation, AnimationOverlay } = useAnimations();
 
   // Player turn history (declare first to use in callbacks)
   const { addTurn, getPlayerHistory } = usePlayerTurnHistory();
@@ -81,11 +87,9 @@ export default function ZeroOneGame() {
         addTurnRef.current(playerState.player, gameStateRef.current.currentRound, hits);
       }
 
-      // Play sounds
+      // Play sound when game is finished
       if (isGameFinished) {
         playSound("game-over");
-      } else {
-        playSound("player-change");
       }
 
       // Show turn summary when player finishes turn (except if game is finished)
@@ -140,18 +144,15 @@ export default function ZeroOneGame() {
     const previousScore = previousState?.players[currentPlayerIndex].currentScore ?? 0;
 
     // Play sound based on segment type
-    if (segment.Section === 0) {
+    if (segment.Section === SEGMENT_SECTIONS.MISS) {
       // Miss
       playSound("dart-miss");
-    } else if (segment.Type === 3) {
-      // Triple
-      playSound("triple");
-    } else if (segment.Section === 25) {
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL && segment.Type === SEGMENT_TYPES.DOUBLE) {
+      // Double Bull
+      playSound("double-bull");
+    } else if (segment.Section === SEGMENT_SECTIONS.BULL) {
       // Bull
       playSound("bull");
-    } else {
-      // Normal hit
-      playSound("dart-hit");
     }
 
     // Process the hit
@@ -166,18 +167,12 @@ export default function ZeroOneGame() {
 
       // Check for bust (score went back to previous)
       if (newScore === previousScore && gameState.dartsThrown === 3) {
-        playSound("bust");
+        playSound("game-over");
       }
 
-      // Check for checkout (score reached 0)
+      // Check for victory (score reached 0)
       if (newScore === 0) {
-        playSound("checkout");
-      }
-
-      // Check for high score (180)
-      const dartValue = calculateDartValue(segment);
-      if (dartValue >= 60) {
-        playSound("high-score");
+        playSound("victory");
       }
     }, 100);
   };
@@ -185,6 +180,31 @@ export default function ZeroOneGame() {
   // Granboard connection management
   const { connectionState, connectToBoard } =
     useGranboardConnection(handleSegmentHitWithSound);
+
+  // Trigger animations after 3rd dart (with delay after hit animation)
+  useEffect(() => {
+    if (gameState && gameState.dartsThrown === 3 && currentTurnHits.length === 3) {
+      // Wait for hit animation to finish
+      const timer = setTimeout(() => {
+        // Animation priority system (only one animation at a time)
+        const hits = currentTurnHits;
+
+        // Priority 1: Victory (handled elsewhere when score reaches 0)
+        // Priority 2: Three misses (Goat)
+        if (hits.every((hit) => hit.Section === SEGMENT_SECTIONS.MISS)) {
+          playSound("goat");
+          playAnimation("three-miss");
+        }
+        // Priority 3: Three triples (Unicorn)
+        else if (hits.every((hit) => hit.Type === SEGMENT_TYPES.TRIPLE)) {
+          playSound("horse");
+          playAnimation("three-triple");
+        }
+      }, ANIMATION_TIMINGS.HIT_ANIMATION_DELAY);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameState, currentTurnHits, playAnimation, playSound]);
 
   // Close turn summary when next player throws a dart
   useEffect(() => {
@@ -254,6 +274,9 @@ export default function ZeroOneGame() {
 
   return (
     <main className="h-screen bg-theme-primary flex flex-col px-4 py-3 gap-3 overflow-hidden">
+      {/* Animations overlay */}
+      <AnimationOverlay />
+
       <GameHeader
         gameMode={gameState.mode}
         connectionState={connectionState}

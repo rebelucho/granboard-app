@@ -7,9 +7,47 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
 [![Next.js](https://img.shields.io/badge/Next.js-16.0-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/home.png" alt="Home Screen" />
+      <p align="center"><b>Home - Game Mode Selection</b></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/cricket-setup.png" alt="Cricket Setup" />
+      <p align="center"><b>Cricket - Player Setup</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/cricket-game.png" alt="Cricket Game" />
+      <p align="center"><b>Cricket - In-Game View</b></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/01-game.png" alt="01 Game" />
+      <p align="center"><b>01 Game - Scoreboard</b></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/settings.png" alt="Settings" />
+      <p align="center"><b>Settings</b></p>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 ### Available Game Modes
+
+- **01 Games** 
+  - Classic countdown games (301, 501, etc.)
+  - Player order selection (random, throw for order, manual)
+  - Real-time scoreboard with marks tracking
+  - Undo functionality
+  - Game history tracking
 
 - **Cricket**
   - Standard Cricket gameplay
@@ -20,22 +58,19 @@ A modern, feature-rich web application for Granboard electronic dartboards, buil
   - Undo functionality
   - Game history tracking
 
-### Coming Soon
-
-- **01 Games** - Classic countdown games (301, 501, etc.)
-- **Practice Mode** - Training exercises and skill development
-- **Party Mode** - Fun casual game variants
-- **Match Mode** - Competitive tournament play
-- **AI Mode** - Play against computer opponents
 
 ### Core Features
 
 - **Web Bluetooth Integration** - Direct connection to Granboard devices
 - **Real-time Scoring** - Instant dart detection and scoring
-- **Responsive Design** - Works on desktop and mobile devices
-- **Modern UI** - Clean, intuitive interface with Tailwind CSS
-- **Type Safety** - Full TypeScript implementation
-- **Comprehensive Testing** - Unit tests and E2E tests with Playwright
+- **Sound Effects & Animations** - Immersive audio feedback and visual effects for special achievements
+- **Theme Support** - Light and dark mode with smooth transitions
+- **Internationalization** - Full support for English and French
+- **Responsive Design** - Works seamlessly on desktop and mobile devices
+- **Modern UI** - Clean, intuitive interface built with Tailwind CSS v4
+- **Type Safety** - Full TypeScript implementation for reliability
+- **Comprehensive Testing** - Unit tests (Jest) and E2E tests (Playwright)
+- **Game History** - Complete turn-by-turn history with undo functionality
 
 ## Prerequisites
 
@@ -71,22 +106,56 @@ pnpm dev
 
 ### Connecting to Granboard
 
-1. Click on your desired game mode (e.g., Cricket)
-2. Click the "Connect to Board" button
+1. Click on your desired game mode (01 or Cricket)
+2. Click the "Connect to Board" button in the game
 3. Select your Granboard device from the browser's Bluetooth pairing dialog
 4. Start playing!
 
+### Playing 01 Games (301, 501, 701)
+
+1. Select **01** from the home screen
+2. Choose your game mode (301, 501, or 701)
+3. Add players
+4. Select game options:
+   - **Double Out** - Must finish on a double
+   - **Max Rounds** - Optional round limit
+5. Choose player order (random, throw for order, manual, or current)
+6. Click "Start Game"
+7. Connect your Granboard and start playing!
+
+**Game Features:**
+- Real-time score updates
+- Automatic bust detection
+- Statistics (Average, PPD)
+- Turn history with undo functionality
+- Victory animations and sound effects
+
 ### Playing Cricket
 
-1. Select Cricket from the home screen
-2. Add players
-3. Choose player order:
-   - **Random** - Automatic shuffle
-   - **Throw for order** - Each player throws, highest score goes first
-   - **Manual** - Arrange players manually
-   - **Current order** - Keep the order players were added
-4. Connect your Granboard
-5. Throw darts and watch the scores update automatically!
+1. Select **Cricket** from the home screen
+2. Choose game mode:
+   - **Standard** - Score points after closing numbers
+   - **Cut Throat** - Give points to opponents
+3. Add players
+4. Set max rounds (default: 20)
+5. Choose player order (random, throw for order, manual, or current)
+6. Click "Start Game"
+7. Connect your Granboard and start throwing!
+
+**Game Features:**
+- Real-time marks tracking (visual indicators)
+- MPR (Marks Per Round) statistics
+- Turn history with detailed hit breakdown
+- Undo functionality
+- Special animations (Three in a Bed, Hat Trick)
+- Sound effects for hits and achievements
+
+### Settings & Customization
+
+- **Theme** - Switch between light and dark mode
+- **Volume** - Adjust sound effects volume
+- **Sound** - Enable/disable sound effects
+- **Language** - Switch between English and French
 
 ## Development
 
@@ -94,20 +163,56 @@ pnpm dev
 
 ```
 granboard-app/
-├── app/                      # Next.js app directory
-│   ├── components/          # Shared components
-│   ├── cricket/            # Cricket game module
-│   │   ├── components/     # Cricket-specific components
-│   │   └── game/          # Game logic and hooks
-│   └── page.tsx           # Home page
-├── services/               # Business logic
-│   ├── granboard.ts       # Bluetooth connection service
-│   ├── cricket.ts         # Cricket game logic
-│   └── boardinfo.ts       # Segment definitions
-├── __tests__/             # Unit tests
-├── e2e/                   # E2E tests
-└── public/                # Static assets
+├── app/                           # Next.js app directory
+│   ├── components/               # Shared UI components
+│   │   └── Card.tsx             # Reusable game card component
+│   ├── contexts/                # React contexts
+│   │   └── SettingsContext.tsx  # Global settings (theme, sound, volume)
+│   ├── hooks/                   # Shared custom hooks
+│   │   └── useAnimations.tsx    # Animation system hook
+│   ├── cricket/                 # Cricket game module
+│   │   ├── components/         # Cricket setup components
+│   │   └── game/               # Cricket game implementation
+│   │       ├── components/     # Game UI components
+│   │       └── hooks/          # Game-specific hooks
+│   ├── 01/                      # 01 games module (301, 501, 701)
+│   │   ├── components/         # 01 setup components
+│   │   └── game/               # 01 game implementation
+│   │       ├── components/     # Game UI components
+│   │       └── hooks/          # Game-specific hooks
+│   ├── [locale]/               # Internationalization routing
+│   └── page.tsx                # Home page
+├── services/                    # Business logic & game engines
+│   ├── granboard.ts            # Bluetooth connection service
+│   ├── boardinfo.ts            # Segment definitions & enums
+│   ├── cricket.ts              # Cricket game engine
+│   └── zeroone.ts              # 01 games engine
+├── constants/                   # Centralized constants
+│   ├── segments.ts             # Segment types and utilities
+│   ├── animations.ts           # Animation timing constants
+│   ├── sounds.ts               # Sound file paths
+│   └── storage.ts              # Session storage keys
+├── messages/                    # Internationalization files
+│   ├── en.json                 # English translations
+│   └── fr.json                 # French translations
+├── __tests__/                   # Unit tests
+├── e2e/                        # E2E tests with Playwright
+│   ├── take-screenshots.spec.ts  # Screenshot generator
+│   └── *.spec.ts               # E2E test suites
+├── public/                     # Static assets
+│   └── assets/                # Images and sounds
+└── docs/                       # Documentation
+    └── screenshots/            # README screenshots
 ```
+
+### Key Directories Explained
+
+- **`app/`** - Next.js 16 App Router structure with internationalization
+- **`services/`** - Pure TypeScript game logic, independent of UI
+- **`constants/`** - Centralized constants for maintainability (added during refactoring)
+- **`contexts/`** - Global state management (settings, theme, sound)
+- **`hooks/`** - Reusable React hooks for common functionality
+- **`e2e/`** - End-to-end tests including automated screenshot generation
 
 ### Available Scripts
 
@@ -173,15 +278,17 @@ pnpm test:e2e:debug    # Debug mode
 ## Roadmap
 
 - [x] Add 01 game modes (301, 501, 701)
+- [x] Add sound effects and animations
+- [x] Support for multiple languages (EN/FR)
+- [x] Dark/light theme toggle
+- [x] Player turn history tracking
+- [x] Undo functionality for both games
 - [ ] Implement practice mode with training exercises
 - [ ] Add party games (Shanghai, Around the Clock, etc.)
 - [ ] Create match mode for tournaments
 - [ ] Build AI opponent system
 - [ ] Add player profiles and statistics tracking
 - [ ] Implement game replay functionality
-- [ ] Add sound effects and animations
-- [x] Support for multiple languages
-- [x] Dark/light theme toggle
 
 ## Contributing
 
