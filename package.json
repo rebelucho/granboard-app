@@ -40,7 +40,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/web-bluetooth": "^0.0.21",
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.23",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "16.0.1",
