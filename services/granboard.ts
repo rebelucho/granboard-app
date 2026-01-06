@@ -225,9 +225,9 @@ export class Granboard {
       console.log(segmentID);
       this.segmentHitCallback?.(CreateSegment(segmentID));
     } else {
-      // Treat unknown segments as MISS (out of bounds)
-      console.log(`Unknown segment UID: ${segmentUID} - treating as MISS`);
-      this.segmentHitCallback?.(CreateSegment(SegmentID.MISS));
+      // Ignore unknown segments (could be battery status, button presses, etc.)
+      console.debug(`Ignoring unknown segment UID: ${segmentUID}`);
+      // Do not trigger callback - this avoids false MISS events
     }
   }
 

@@ -2,8 +2,9 @@ import { useTranslations } from "next-intl";
 import { Segment } from "@/services/boardinfo";
 import { PlayerState as PlayerCricketState } from "@/services/cricket";
 import { PlayerState as PlayerZeroOneState } from "@/services/zeroone";
+import { PlayerTargetBullState } from "@/services/targetbull";
 
-type PlayerState = PlayerCricketState | PlayerZeroOneState;
+type PlayerState = PlayerCricketState | PlayerZeroOneState | PlayerTargetBullState;
 
 interface CurrentPlayerPanelProps {
   currentPlayer: PlayerState;

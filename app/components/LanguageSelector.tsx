@@ -13,6 +13,8 @@ export function LanguageSelector() {
     startTransition(async () => {
       // Set cookie
       document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`; // 1 year
+      console.log('LanguageSelector: set cookie for', newLocale);
+      console.log('All cookies:', document.cookie);
 
       // Save dialog state to reopen after reload
       localStorage.setItem('granboard_reopen_settings', 'true');

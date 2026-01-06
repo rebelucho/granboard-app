@@ -5,6 +5,7 @@
     "remove": "Remove",
     "start": "Start Game",
     "bluetooth": "Bluetooth",
+    "miss": "Miss",
     "connectionState": {
       "waiting": "waiting",
       "connecting": "connecting",
@@ -38,7 +39,8 @@
     "title": "GRANBOARD",
     "modes": {
       "01": "01",
-      "cricket": "CRICKET"
+      "cricket": "CRICKET",
+      "targetBull": "TARGET BULL"
     }
   },
   "cricket": {
@@ -251,6 +253,101 @@
       "bustDesc": "If you go below 0 or land on 1, it's a bust. Your turn is lost and your score remains unchanged.",
       "doubleOutTitle": "Double Out",
       "doubleOutDesc": "When enabled, you MUST finish on a double to win. Finishing on anything other than a double is a bust."
+    }
+  },
+  "targetBull": {
+    "title": "TARGET BULL",
+    "subtitle": "Setup",
+    "players": {
+      "title": "Players",
+      "placeholder": "Player name",
+      "count": "{count} player",
+      "count_plural": "{count} players",
+      "minRequired": "Add at least 2 players to start the game"
+    },
+    "bullSplitMode": {
+      "title": "Bull Split Mode",
+      "split": {
+        "title": "Split Bull",
+        "description": "25 points for 25 zone, 50 points for Bull zone"
+      },
+      "unified": {
+        "title": "Unified Bull",
+        "description": "Both 25 and Bull zones give 50 points per hit"
+      }
+    },
+    "rounds": {
+      "title": "Number of Rounds",
+      "description": "rounds per game (0 = unlimited)"
+    },
+    "targetScore": {
+      "title": "Target Score",
+      "description": "Points to win (0 = win by rounds)",
+      "note": "If a target score is set, the game ends when a player reaches or exceeds it."
+    },
+    "rules": {
+      "title": "Target Bull Rules",
+      "common": [
+        "Goal: Score maximum points using only sector 25 and bull sector",
+        "Each player throws 3 darts per round",
+        "Only hits on 25 (single bull) and 50 (double bull) award points",
+        "All other sections (1-20, miss) count as 0 points"
+      ],
+      "scoring": {
+        "title": "Scoring System:",
+        "rules": [
+          "25 points for hitting sector 25 (if 'Split Bull' mode)",
+          "50 points for hitting sector 25 (if 'Unified Bull' mode)",
+          "50 points for hitting Bull zone (single bull)",
+          "50 points for hitting Double Bull"
+        ]
+      }
+    },
+    "errors": {
+      "minPlayers": "You need at least 2 players to start!",
+      "connectionFailed": "Failed to connect to Granboard. Make sure it's powered on and try again."
+    },
+    "game": {
+      "points": "points",
+      "totalScore": "Total Score",
+      "accuracy": "Accuracy",
+      "darts": "Darts",
+      "rounds": "Rounds",
+      "hits": "Hits",
+      "singleBull": "Single Bull",
+      "doubleBull": "Double Bull",
+      "newGame": "New Game",
+      "quit": "Quit",
+      "settings": "Settings",
+      "legend": "Legend",
+      "roundHistory": "Round History",
+      "round": "Round",
+      "dart1": "Dart 1",
+      "dart2": "Dart 2",
+      "dart3": "Dart 3"
+    },
+    "legend": {
+      "title": "Legend & Rules",
+      "close": "Close",
+      "objectiveTitle": "Objective",
+      "objectiveDesc": "Score maximum points by hitting only sector 25 and bull sector. The player with the highest total points after the specified number of rounds or upon reaching the target score wins.",
+      "scoringTitle": "Scoring System",
+      "scoringSplitMode": "Bull split mode",
+      "scoringSplitDesc": "25 points for sector 25, 50 points for Bull zone (single bull). Double Bull always 50 points.",
+      "scoringUnifiedDesc": "50 points for both zones (25 and Bull). Double Bull also 50 points.",
+      "points25Split": "25 points",
+      "points25Unified": "50 points",
+      "pointsBull": "50 points",
+      "pointsDoubleBull": "50 points",
+      "otherSections": "Hits on any other sections (1-20) award no points.",
+      "ppdTitle": "PPD (Points Per Dart)",
+      "ppdDesc": "Average points scored per dart (Total points scored ÷ Number of darts thrown).",
+      "pprTitle": "PPR (Points Per Round)",
+      "pprDesc": "Average points scored per round (Total points scored ÷ Number of rounds played).",
+      "accuracyTitle": "Accuracy",
+      "accuracyDesc": "Percentage of valid target hits (25 or Bull) out of total darts thrown.",
+      "winConditionsTitle": "Win Conditions",
+      "winConditionsDesc": "The game can end in two ways: 1) If a number of rounds is set – after they are completed, the player with the highest total points wins. 2) If a target score is set – the first player to reach or exceed it wins."
     }
   }
 }

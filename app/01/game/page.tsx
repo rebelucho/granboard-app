@@ -138,6 +138,20 @@ export default function ZeroOneGame() {
 
   // Wrapper for segment hit with sound effects
   const handleSegmentHitWithSound = (segment: any) => {
+    // Guard against undefined/null segment - treat as MISS
+    if (!segment) {
+      console.warn('Segment is undefined or null in handleSegmentHitWithSound, treating as MISS');
+      // Create a MISS segment
+      segment = {
+        ID: 84, // SegmentID.MISS
+        Type: 4, // SegmentType.Other
+        Section: 0, // SegmentSection.Other
+        Value: 0,
+        LongName: 'Miss',
+        ShortName: 'Miss',
+      };
+    }
+
     // Store previous state to check for bust
     const previousState = gameState ? { ...gameState } : null;
     const currentPlayerIndex = gameState?.currentPlayerIndex ?? 0;

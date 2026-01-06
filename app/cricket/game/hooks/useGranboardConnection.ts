@@ -1,55 +1,31 @@
-import { useState, useEffect } from "react";
-import { Granboard } from "@/services/granboard";
+import { useGranboard } from "@/app/contexts/GranboardContext";
 import { Segment } from "@/services/boardinfo";
+import { useEffect } from "react";
 
-type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
+type ConnectionState = "waiting" | "connecting" | "connected" | "error";
 
 export function useGranboardConnection(
   onSegmentHit?: (segment: Segment) => void
 ) {
-  const [granboard, setGranboard] = useState<Granboard | null>(null);
-  const [connectionState, setConnectionState] =
-    useState<ConnectionState>("déconnecté");
+  const {
+    granboard,
+    connectionState,
+    connectToBoard,
+    // setSegmentHitCallback, // no longer needed
+  } = useGranboard();
 
-  // Try to auto-connect on mount
+  // Update granboard's segment hit callback directly when onSegmentHit or granboard changes
   useEffect(() => {
-    const tryAutoConnect = async () => {
-      setConnectionState("connexion");
-      const board = await Granboard.TryAutoConnect();
-      if (board) {
-        setGranboard(board);
-        setConnectionState("connecté");
-      } else {
-        setConnectionState("déconnecté");
-      }
-    };
-
-    tryAutoConnect();
-  }, []); // Empty deps - only run on mount
-
-  // Update granboard callback when onSegmentHit changes
-  useEffect(() => {
-    if (granboard && onSegmentHit) {
+    if (granboard) {
+      const callback = onSegmentHit ?? undefined;
+      console.log('useGranboardConnection: assigning callback to granboard', callback);
       /* eslint-disable react-hooks/immutability */
-      granboard.segmentHitCallback = onSegmentHit;
+      granboard.segmentHitCallback = callback;
       /* eslint-enable react-hooks/immutability */
+    } else {
+      console.log('useGranboardConnection: granboard is null, cannot assign callback');
     }
   }, [granboard, onSegmentHit]);
-
-  const connectToBoard = async () => {
-    setConnectionState("connexion");
-    try {
-      const board = await Granboard.ConnectToBoard();
-      if (onSegmentHit) {
-        board.segmentHitCallback = onSegmentHit;
-      }
-      setGranboard(board);
-      setConnectionState("connecté");
-    } catch (error) {
-      console.error(error);
-      setConnectionState("erreur");
-    }
-  };
 
   const setLEDs = async (segments: number[]) => {
     if (granboard) {
@@ -67,7 +43,7 @@ export function useGranboardConnection(
     granboard,
     connectionState,
     connectToBoard,
-    isConnected: connectionState === "connecté",
+    isConnected: connectionState === "connected",
     setLEDs,
     clearLEDs,
   };
