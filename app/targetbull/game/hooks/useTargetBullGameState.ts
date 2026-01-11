@@ -1,17 +1,17 @@
 import { useState, useRef, useCallback } from "react";
 import { Segment, SegmentID } from "@/services/boardinfo";
 import {
-  CricketGameState,
+  TargetBullGameState,
   processDartHit,
   nextPlayer,
-} from "@/services/cricket";
+} from "@/services/targetbull";
 
-export function useCricketGameState(
-  initialGameState: CricketGameState | null,
+export function useTargetBullGameState(
+  initialGameState: TargetBullGameState | null,
   onTurnHitsUpdate: (hits: Segment[]) => void,
   onTurnComplete?: (player: any, hits: Segment[], isGameFinished: boolean) => void
 ) {
-  const [gameState, setGameState] = useState<CricketGameState | null>(
+  const [gameState, setGameState] = useState<TargetBullGameState | null>(
     initialGameState
   );
   const [lastHit, setLastHit] = useState<Segment | null>(null);
@@ -60,7 +60,7 @@ export function useCricketGameState(
     (segment: Segment) => {
       // Debounce to prevent double detection
       const now = Date.now();
-      if (now - lastDartHitRef.current < 300) {
+      if (now - lastDartHitRef.current < 1000) {
         return;
       }
       lastDartHitRef.current = now;
@@ -75,7 +75,7 @@ export function useCricketGameState(
         hitId,
       });
 
-      let processedResult: CricketGameState | null = null;
+      let processedResult: TargetBullGameState | null = null;
 
       setGameState((currentState) => {
         if (!currentState) return currentState;
@@ -123,7 +123,7 @@ export function useCricketGameState(
   );
 
   const restoreGameState = useCallback(
-    (state: CricketGameState, turnHits: Segment[]) => {
+    (state: TargetBullGameState, turnHits: Segment[]) => {
       setGameState(state);
       setCurrentTurnHits(turnHits);
       setLastHit(null);

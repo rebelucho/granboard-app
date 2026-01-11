@@ -5,6 +5,7 @@
     "remove": "Retirer",
     "start": "Commencer la partie",
     "bluetooth": "Bluetooth",
+    "miss": "Miss",
     "connectionState": {
       "waiting": "en attente",
       "connecting": "connexion",
@@ -38,7 +39,8 @@
     "title": "GRANBOARD",
     "modes": {
       "01": "01",
-      "cricket": "CRICKET"
+      "cricket": "CRICKET",
+      "targetBull": "TARGET BULL"
     }
   },
   "cricket": {
@@ -251,6 +253,101 @@
       "bustDesc": "Si vous dépassez 0 ou arrivez à 1, c'est un bust. Votre tour est perdu et votre score reste inchangé.",
       "doubleOutTitle": "Double Out",
       "doubleOutDesc": "Quand activé, vous DEVEZ finir sur un double pour gagner. Finir sur autre chose qu'un double est un bust."
+    }
+  },
+  "targetBull": {
+    "title": "TARGET BULL",
+    "subtitle": "Configuration",
+    "players": {
+      "title": "Joueurs",
+      "placeholder": "Nom du joueur",
+      "count": "{count} joueur",
+      "count_plural": "{count} joueurs",
+      "minRequired": "Ajoutez au moins 2 joueurs pour commencer la partie"
+    },
+    "bullSplitMode": {
+      "title": "Mode de bull",
+      "split": {
+        "title": "Bull séparé",
+        "description": "25 points pour la zone 25, 50 points pour la zone Bull"
+      },
+      "unified": {
+        "title": "Bull unifié",
+        "description": "Les zones 25 et Bull donnent 50 points par impact"
+      }
+    },
+    "rounds": {
+      "title": "Nombre de tours",
+      "description": "tours par partie (0 = illimité)"
+    },
+    "targetScore": {
+      "title": "Score cible",
+      "description": "Points pour gagner (0 = victoire par tours)",
+      "note": "Si un score cible est défini, la partie se termine lorsqu'un joueur l'atteint ou le dépasse."
+    },
+    "rules": {
+      "title": "Règles du Target Bull",
+      "common": [
+        "Objectif: Marquer un maximum de points en utilisant uniquement le secteur 25 et le secteur bull",
+        "Chaque joueur lance 3 fléchettes par tour",
+        "Seuls les impacts sur 25 (simple bull) et 50 (double bull) rapportent des points",
+        "Toutes les autres sections (1-20, miss) comptent pour 0 point"
+      ],
+      "scoring": {
+        "title": "Système de pointage:",
+        "rules": [
+          "25 points pour toucher le secteur 25 (si mode 'Bull séparé')",
+          "50 points pour toucher le secteur 25 (si mode 'Bull unifié')",
+          "50 points pour toucher la zone Bull (simple bull)",
+          "50 points pour toucher le Double Bull"
+        ]
+      }
+    },
+    "errors": {
+      "minPlayers": "Il faut au moins 2 joueurs pour commencer!",
+      "connectionFailed": "Impossible de se connecter à la Granboard. Assurez-vous qu'elle est allumée et réessayez."
+    },
+    "game": {
+      "points": "points",
+      "totalScore": "Score total",
+      "accuracy": "Précision",
+      "darts": "Fléchettes",
+      "rounds": "Tours",
+      "hits": "Impacts",
+      "singleBull": "Single Bull",
+      "doubleBull": "Double Bull",
+      "newGame": "Nouvelle partie",
+      "quit": "Quitter",
+      "settings": "Paramètres",
+      "legend": "Légende",
+      "roundHistory": "Historique des tours",
+      "round": "Tour",
+      "dart1": "Fléchette 1",
+      "dart2": "Fléchette 2",
+      "dart3": "Fléchette 3"
+    },
+    "legend": {
+      "title": "Légende et Règles",
+      "close": "Fermer",
+      "objectiveTitle": "Objectif",
+      "objectiveDesc": "Marquez un maximum de points en touchant uniquement le secteur 25 et le secteur bull. Le joueur avec le plus grand total de points après le nombre spécifié de tours ou en atteignant le score cible gagne.",
+      "scoringTitle": "Système de pointage",
+      "scoringSplitMode": "Mode de bull",
+      "scoringSplitDesc": "25 points pour le secteur 25, 50 points pour la zone Bull (simple bull). Le Double Bull vaut toujours 50 points.",
+      "scoringUnifiedDesc": "50 points pour les deux zones (25 et Bull). Le Double Bull vaut aussi 50 points.",
+      "points25Split": "25 points",
+      "points25Unified": "50 points",
+      "pointsBull": "50 points",
+      "pointsDoubleBull": "50 points",
+      "otherSections": "Les impacts sur toute autre section (1-20) ne rapportent aucun point.",
+      "ppdTitle": "PPD (Points Par Dart)",
+      "ppdDesc": "Moyenne de points marqués par fléchette (Total des points marqués ÷ Nombre de fléchettes lancées).",
+      "pprTitle": "PPR (Points Par Round)",
+      "pprDesc": "Moyenne de points marqués par tour (Total des points marqués ÷ Nombre de tours joués).",
+      "accuracyTitle": "Précision",
+      "accuracyDesc": "Pourcentage d'impacts sur cibles valides (25 ou Bull) par rapport au nombre total de fléchettes lancées.",
+      "winConditionsTitle": "Conditions de victoire",
+      "winConditionsDesc": "La partie peut se terminer de deux façons: 1) Si un nombre de tours est défini – après leur achèvement, le joueur avec le plus grand total de points gagne. 2) Si un score cible est défini – le premier joueur qui l'atteint ou le dépasse gagne."
     }
   }
 }

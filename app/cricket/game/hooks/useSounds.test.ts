@@ -54,10 +54,15 @@ describe('useSounds', () => {
     mockUseSettings.mockReturnValue({
       volume: 0.5,
       soundEnabled: true,
+      setVolume: jest.fn(),
+      toggleSound: jest.fn(),
+      theme: 'dark',
+      setTheme: jest.fn(),
+      resolvedTheme: 'dark',
+      isDialogOpen: false,
       openDialog: jest.fn(),
       closeDialog: jest.fn(),
-      themeMode: 'dark',
-      setThemeMode: jest.fn(),
+      customContent: undefined,
     });
   });
 
@@ -71,10 +76,15 @@ describe('useSounds', () => {
     mockUseSettings.mockReturnValue({
       volume: 0.5,
       soundEnabled: false,
+      setVolume: jest.fn(),
+      toggleSound: jest.fn(),
+      theme: 'dark',
+      setTheme: jest.fn(),
+      resolvedTheme: 'dark',
+      isDialogOpen: false,
       openDialog: jest.fn(),
       closeDialog: jest.fn(),
-      themeMode: 'dark',
-      setThemeMode: jest.fn(),
+      customContent: undefined,
     });
 
     const { result } = renderHook(() => useSounds());
@@ -160,10 +170,15 @@ describe('useSounds', () => {
     mockUseSettings.mockReturnValue({
       volume: 0.7,
       soundEnabled: true,
+      setVolume: jest.fn(),
+      toggleSound: jest.fn(),
+      theme: 'dark',
+      setTheme: jest.fn(),
+      resolvedTheme: 'dark',
+      isDialogOpen: false,
       openDialog: jest.fn(),
       closeDialog: jest.fn(),
-      themeMode: 'dark',
-      setThemeMode: jest.fn(),
+      customContent: undefined,
     });
 
     const { result } = renderHook(() => useSounds());

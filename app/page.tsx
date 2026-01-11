@@ -1,32 +1,27 @@
 "use client";
 
-import { Granboard } from "@/services/granboard";
 import Link from "next/link";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { LanguageSelector } from "./components/LanguageSelector";
 import { useSettings } from "./contexts/SettingsContext";
+import { useGranboard } from "./contexts/GranboardContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 export default function Home() {
   const t = useTranslations();
   const { openDialog } = useSettings();
-  const [granboard, setGranboard] = useState<Granboard>();
-  const [connectionState, setConnectionState] = useState<
-    "waiting" | "connecting" | "connected" | "error"
-  >("waiting");
+  const {
+    connectionState: granboardConnectionState,
+    connectToBoard,
+    disconnect,
+    tryAutoConnect,
+  } = useGranboard();
+
+  // Connection state is already in English after removing French strings
+  const connectionState = granboardConnectionState;
 
   const onConnectionTest = async () => {
-    setConnectionState("connecting");
-
-    try {
-      setGranboard(await Granboard.ConnectToBoard());
-      setConnectionState("connected");
-    } catch (error) {
-      console.error(error);
-      setConnectionState("error");
-    }
+    await connectToBoard();
   };
 
   return (
@@ -55,6 +50,7 @@ export default function Home() {
               : "bg-theme-interactive text-theme-interactive bg-theme-interactive-hover"
           }`}
           onClick={onConnectionTest}
+          disabled={connectionState === "connecting"}
         >
           {t(`common.connectionState.${connectionState}`)}
         </button>
@@ -81,6 +77,14 @@ export default function Home() {
           className="w-full h-32 text-white bg-green-700 hover:bg-green-600 rounded-2xl text-6xl font-bold flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-green-500/50"
         >
           {t('home.modes.cricket')}
+        </Link>
+
+        <Link
+          href="/targetbull"
+          data-testid="game-card-targetbull"
+          className="w-full h-32 text-white bg-yellow-700 hover:bg-yellow-600 rounded-2xl text-6xl font-bold flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-yellow-500/50"
+        >
+          {t('home.modes.targetBull')}
         </Link>
       </div>
     </main>

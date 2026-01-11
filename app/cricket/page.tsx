@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Player, CricketGameMode } from "@/services/cricket";
 import { PlayerOrderModal } from "./components/PlayerOrderModal";
 import { PlayerOrderDialog } from "./components/PlayerOrderDialog";
-import { Granboard } from "@/services/granboard";
+import { useGranboard } from "../contexts/GranboardContext";
 import { useSettings } from "../contexts/SettingsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faGear } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +23,11 @@ export default function CricketSetup() {
   const [maxRounds, setMaxRounds] = useState<number>(20);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
-  const [granboard, setGranboard] = useState<Granboard | null>(null);
+  const { granboard, connectToBoard } = useGranboard();
+
+  useEffect(() => {
+    console.log('CricketSetup granboard:', granboard);
+  }, [granboard]);
 
   const addPlayer = () => {
     if (currentName.trim() === "") return;
@@ -54,9 +58,17 @@ export default function CricketSetup() {
   };
 
   const handleThrowForOrder = async () => {
+    console.log('handleThrowForOrder: granboard =', granboard);
     try {
-      const board = await Granboard.ConnectToBoard();
-      setGranboard(board);
+      // Use existing connection or create new one
+      let board = granboard;
+      if (!board) {
+        console.log('No board, calling connectToBoard');
+        board = await connectToBoard();
+        console.log('Connected board:', board);
+      } else {
+        console.log('Using existing board');
+      }
       setShowOrderModal(true);
     } catch (error) {
       console.error("Failed to connect to Granboard:", error);

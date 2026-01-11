@@ -4,10 +4,10 @@ import { ZeroOneMode } from "@/services/zeroone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faGear, faCheck } from "@fortawesome/free-solid-svg-icons";
 
-type ConnectionState = "déconnecté" | "connexion" | "connecté" | "erreur";
+type ConnectionState = "waiting" | "connecting" | "connected" | "error";
 
 interface GameHeaderProps {
-  gameMode: CricketGameMode | ZeroOneMode;
+  gameMode: CricketGameMode | ZeroOneMode | string;
   connectionState: ConnectionState;
   onConnect: () => void;
   onShowLegend?: () => void;
@@ -25,6 +25,7 @@ export function GameHeader({
 
   // Determine if it's a ZeroOne mode
   const isZeroOneMode = typeof gameMode === 'number' && (gameMode === 301 || gameMode === 501 || gameMode === 701);
+  const isStringMode = typeof gameMode === 'string';
 
   return (
     <div className="flex justify-between items-center">
@@ -37,6 +38,8 @@ export function GameHeader({
                 {gameMode}
               </span>
             </>
+          ) : isStringMode ? (
+            <>{gameMode}</>
           ) : (
             <>
               CRICKET
@@ -74,7 +77,7 @@ export function GameHeader({
             <FontAwesomeIcon icon={faGear} /> {t('cricket.game.settings')}
           </button>
         )}
-        {connectionState === "connecté" ? (
+        {connectionState === "connected" ? (
           <div data-testid="connection-status" className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm shadow-lg flex items-center gap-2">
             <FontAwesomeIcon icon={faCheck} /> {t('cricket.game.connected')}
           </div>
@@ -82,12 +85,12 @@ export function GameHeader({
           <button
             data-testid="connect-button"
             onClick={onConnect}
-            disabled={connectionState === "connexion"}
+            disabled={connectionState === "connecting"}
             className="px-4 py-2 bg-accent text-white rounded-lg hover:opacity-90 text-sm font-medium disabled:bg-theme-interactive transition-all shadow-lg"
           >
-            {connectionState === "connexion"
+            {connectionState === "connecting"
               ? t('cricket.game.connecting')
-              : connectionState === "erreur"
+              : connectionState === "error"
               ? t('cricket.game.errorRetry')
               : t('cricket.game.connectGranboard')}
           </button>
