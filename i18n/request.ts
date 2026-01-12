@@ -11,9 +11,9 @@ export default getRequestConfig(async (params) => {
   // Try to get locale from cookie
   const cookieStore = await cookies();
   const allCookies = cookieStore.getAll();
-  // console.log('i18n request: all cookies', allCookies.map(c => ({ name: c.name, value: c.value })));
+  console.log('i18n request: all cookies', allCookies.map(c => ({ name: c.name, value: c.value })));
   const cookieLocale = cookieStore.get('NEXT_LOCALE')?.value;
-  // console.log('i18n request: cookieLocale', cookieLocale);
+  console.log('i18n request: cookieLocale', cookieLocale);
   if (cookieLocale && isLocale(cookieLocale)) {
     locale = cookieLocale;
   }
@@ -21,7 +21,7 @@ export default getRequestConfig(async (params) => {
   if (params.locale && isLocale(params.locale)) {
     locale = params.locale;
   }
-  // console.log('i18n request: final locale', locale);
+  console.log('i18n request: final locale', locale);
   // Fallback to default locale
   return {
     locale,
