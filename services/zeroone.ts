@@ -1,4 +1,14 @@
 import { Segment, SegmentType } from "./boardinfo";
+import {
+  LegSettings,
+  LegWinCondition,
+  StartingPlayerRule,
+  MatchState,
+  createMatchState,
+  updateMatchState,
+  getNextStartingPlayer,
+  MatchFormat,
+} from './match';
 
 // Zero-One game modes: 301, 501, 701
 export enum ZeroOneMode {
@@ -25,6 +35,10 @@ export interface PlayerZeroOneState {
 // Alias for easier imports
 export type PlayerState = PlayerZeroOneState;
 
+// Re-export leg settings from match module
+export { LegWinCondition, StartingPlayerRule } from './match';
+export type { LegSettings } from './match';
+
 export interface ZeroOneGameState {
   players: PlayerZeroOneState[];
   currentPlayerIndex: number;
@@ -38,6 +52,9 @@ export interface ZeroOneGameState {
   doubleOut: boolean; // Requires finishing on a double
   lastProcessedHit?: string; // To prevent double processing in React Strict Mode
   turnScore: number; // Points scored in current turn (for bust detection)
+  // Leg match fields
+  matchState: MatchState;
+  legSettings: LegSettings;
 }
 
 export const createInitialPlayerState = (
@@ -59,7 +76,13 @@ export const createInitialGameState = (
   players: Player[],
   mode: ZeroOneMode = ZeroOneMode.FiveOhOne,
   doubleOut: boolean = false,
-  maxRounds: number = 0
+  maxRounds: number = 0,
+  legSettings: LegSettings = {
+    format: MatchFormat.Legs,
+    legWinCondition: LegWinCondition.FirstTo,
+    legCount: 3,
+    startingPlayerRule: StartingPlayerRule.Alternate,
+  }
 ): ZeroOneGameState => {
   return {
     players: players.map((p) => createInitialPlayerState(p, mode)),
@@ -73,6 +96,8 @@ export const createInitialGameState = (
     mode,
     doubleOut,
     turnScore: 0,
+    matchState: createMatchState(players.length, legSettings),
+    legSettings,
   };
 };
 
@@ -233,6 +258,39 @@ export const processDartHit = (
     newState.gameFinished = true;
     newState.winner = currentPlayer.player;
     console.log("🏆 Winner:", currentPlayer.player.name);
+
+    const winnerIndex = newState.currentPlayerIndex;
+    const matchUpdate = updateMatchState(
+      newState.matchState,
+      newState.legSettings,
+      winnerIndex
+    );
+    newState.matchState = matchUpdate.updatedMatchState;
+
+    if (matchUpdate.matchWon) {
+      // Match is finished, keep gameFinished = true (leg finished)
+      // matchState already has matchFinished = true and matchWinner set
+    } else {
+      // Match not finished, transition to next leg
+      // Reset player scores
+      newState.players = newState.players.map((playerState) =>
+        createInitialPlayerState(playerState.player, newState.mode)
+      );
+      // Reset game-specific fields
+      newState.dartsThrown = 0;
+      newState.currentRound = 1;
+      newState.turnScore = 0;
+      newState.gameFinished = false;
+      newState.winner = null;
+      newState.lastProcessedHit = undefined;
+      // Determine starting player based on nextLegState
+      if (matchUpdate.nextLegState) {
+        newState.currentPlayerIndex = matchUpdate.nextLegState.startingPlayerIndex;
+      } else {
+        // Fallback: alternate (should not happen)
+        newState.currentPlayerIndex = (winnerIndex + 1) % newState.players.length;
+      }
+    }
   }
 
   // Increment darts thrown (max 3)
@@ -252,6 +310,12 @@ export const cloneGameState = (state: ZeroOneGameState): ZeroOneGameState => {
     players: state.players.map((playerState) => ({
       ...playerState,
     })),
+    matchState: {
+      ...state.matchState,
+      legWins: [...state.matchState.legWins],
+      setWins: state.matchState.setWins ? [...state.matchState.setWins] : undefined,
+    },
+    legSettings: { ...state.legSettings },
   };
 };
 
@@ -328,5 +392,6 @@ export const calculatePPR = (playerState: PlayerZeroOneState): number => {
  */
 export const calculateAverage = (playerState: PlayerZeroOneState): number => {
   if (playerState.roundsPlayed === 0) return 0;
-  return calculatePPR(playerState);
+  return calculatePPD(playerState) * 3;
 };
+

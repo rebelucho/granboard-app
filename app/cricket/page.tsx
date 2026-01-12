@@ -21,6 +21,10 @@ export default function CricketSetup() {
     CricketGameMode.Standard
   );
   const [maxRounds, setMaxRounds] = useState<number>(20);
+  const [legWinCondition, setLegWinCondition] = useState<'firstTo' | 'bestOf'>('firstTo');
+  const [legCount, setLegCount] = useState<number>(3);
+  const [startingPlayerRule, setStartingPlayerRule] = useState<'alternate' | 'loser'>('alternate');
+  const [legsEnabled, setLegsEnabled] = useState(false);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const { granboard, connectToBoard } = useGranboard();
@@ -54,6 +58,10 @@ export default function CricketSetup() {
     sessionStorage.setItem("cricketPlayers", JSON.stringify(orderedPlayers));
     sessionStorage.setItem("cricketGameMode", gameMode);
     sessionStorage.setItem("cricketMaxRounds", maxRounds.toString());
+    sessionStorage.setItem("cricketLegsEnabled", legsEnabled.toString());
+    sessionStorage.setItem("cricketLegWinCondition", legWinCondition);
+    sessionStorage.setItem("cricketLegCount", legCount.toString());
+    sessionStorage.setItem("cricketStartingPlayerRule", startingPlayerRule);
     router.push("/cricket/game");
   };
 
@@ -99,6 +107,10 @@ export default function CricketSetup() {
     sessionStorage.setItem("cricketPlayers", JSON.stringify(orderedPlayers));
     sessionStorage.setItem("cricketGameMode", gameMode);
     sessionStorage.setItem("cricketMaxRounds", maxRounds.toString());
+    sessionStorage.setItem("cricketLegsEnabled", legsEnabled.toString());
+    sessionStorage.setItem("cricketLegWinCondition", legWinCondition);
+    sessionStorage.setItem("cricketLegCount", legCount.toString());
+    sessionStorage.setItem("cricketStartingPlayerRule", startingPlayerRule);
     router.push("/cricket/game");
   };
 
@@ -237,6 +249,112 @@ export default function CricketSetup() {
               </div>
             </button>
           </div>
+        </div>
+
+        {/* Leg settings */}
+        <div className="mb-8">
+          <h3 className="text-3xl font-bold mb-4 text-green-600">
+            Формат матча
+          </h3>
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-green-500 transition-all cursor-pointer">
+              <input
+                type="checkbox"
+                checked={legsEnabled}
+                onChange={(e) => setLegsEnabled(e.target.checked)}
+                className="w-5 h-5 text-green-600"
+              />
+              <div className="flex-1">
+                <div className="font-bold text-theme-primary">Игра по легам</div>
+                <div className="text-sm text-theme-muted">Включить игру по легам или сетам</div>
+              </div>
+            </label>
+          </div>
+
+          {legsEnabled && (
+            <div className="mt-6 space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="legWinCondition"
+                      value="firstTo"
+                      checked={legWinCondition === 'firstTo'}
+                      onChange={() => setLegWinCondition('firstTo')}
+                      className="w-5 h-5 text-green-600"
+                    />
+                    <span className="text-theme-primary">До победы в</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="99"
+                    value={legCount}
+                    onChange={(e) => setLegCount(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                  />
+                  <span className="text-theme-secondary">легах</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="legWinCondition"
+                      value="bestOf"
+                      checked={legWinCondition === 'bestOf'}
+                      onChange={() => setLegWinCondition('bestOf')}
+                      className="w-5 h-5 text-green-600"
+                    />
+                    <span className="text-theme-primary">Лучший из</span>
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="99"
+                    value={legCount}
+                    onChange={(e) => setLegCount(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                  />
+                  <span className="text-theme-secondary">легов</span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xl font-bold mb-3 text-theme-primary">Право начать лег</h4>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-green-500 transition-all cursor-pointer">
+                    <input
+                      type="radio"
+                      name="startingPlayerRule"
+                      value="alternate"
+                      checked={startingPlayerRule === 'alternate'}
+                      onChange={() => setStartingPlayerRule('alternate')}
+                      className="w-5 h-5 text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-bold text-theme-primary">По очереди</div>
+                      <div className="text-sm text-theme-muted">Право начинать лег переходит от игрока к игроку по установленному порядку</div>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-green-500 transition-all cursor-pointer">
+                    <input
+                      type="radio"
+                      name="startingPlayerRule"
+                      value="loser"
+                      checked={startingPlayerRule === 'loser'}
+                      onChange={() => setStartingPlayerRule('loser')}
+                      className="w-5 h-5 text-green-600"
+                    />
+                    <div className="flex-1">
+                      <div className="font-bold text-theme-primary">Проигравший</div>
+                      <div className="text-sm text-theme-muted">Начинает лег проигравший предыдущий лег</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mb-8">

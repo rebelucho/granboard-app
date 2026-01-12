@@ -10,18 +10,29 @@ export function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
 
   const changeLanguage = (newLocale: Locale) => {
-    startTransition(async () => {
-      // Set cookie
-      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`; // 1 year
-      console.log('LanguageSelector: set cookie for', newLocale);
-      console.log('All cookies:', document.cookie);
+    // Set cookie with minimal attributes
+    const cookieString = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
+    document.cookie = cookieString;
+    console.log('LanguageSelector: set cookie for', newLocale);
+    console.log('Cookie string:', cookieString);
+    console.log('All cookies:', document.cookie);
 
-      // Save dialog state to reopen after reload
-      localStorage.setItem('granboard_reopen_settings', 'true');
+    // Verify cookie is set
+    const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/);
+    console.log('Cookie match:', match ? match[1] : 'none');
+    // Also log all cookies as array
+    const cookies = document.cookie.split('; ').map(c => c.trim());
+    console.log('Cookies array:', cookies);
 
-      // Refresh the page to apply the new locale
-      window.location.reload();
-    });
+    // Save dialog state to reopen after reload
+    localStorage.setItem('granboard_reopen_settings', 'true');
+
+    // Small delay to ensure cookie is persisted before reload
+    console.log('Waiting 100ms before reload...');
+    setTimeout(() => {
+      console.log('Reloading page...');
+      window.location.href = window.location.href;
+    }, 100);
   };
 
   return (

@@ -1,4 +1,14 @@
 import { Segment, SegmentSection, SegmentType } from "./boardinfo";
+import {
+  LegSettings,
+  LegWinCondition,
+  StartingPlayerRule,
+  MatchState,
+  createMatchState,
+  updateMatchState,
+  getNextStartingPlayer,
+  MatchFormat,
+} from './match';
 
 // Cricket target numbers: 15, 16, 17, 18, 19, 20, and Bull
 export type CricketNumber = 15 | 16 | 17 | 18 | 19 | 20 | 25;
@@ -31,6 +41,16 @@ export interface PlayerCricketState {
 // Alias for easier imports
 export type PlayerState = PlayerCricketState;
 
+export type CricketLegSettings = LegSettings;
+
+export const DEFAULT_LEG_SETTINGS: CricketLegSettings = {
+  enabled: false,
+  format: MatchFormat.Legs,
+  legWinCondition: LegWinCondition.FirstTo,
+  legCount: 3,
+  startingPlayerRule: StartingPlayerRule.Alternate,
+};
+
 export interface CricketGameState {
   players: PlayerCricketState[];
   currentPlayerIndex: number;
@@ -42,6 +62,8 @@ export interface CricketGameState {
   winner: Player | null;
   mode: CricketGameMode;
   lastProcessedHit?: string; // To prevent double processing in React Strict Mode
+  legSettings: CricketLegSettings;
+  matchState: MatchState;
 }
 
 export const createInitialPlayerState = (player: Player): PlayerCricketState => {
@@ -61,7 +83,8 @@ export const createInitialPlayerState = (player: Player): PlayerCricketState => 
 export const createInitialGameState = (
   players: Player[],
   mode: CricketGameMode = CricketGameMode.Standard,
-  maxRounds: number = 20
+  maxRounds: number = 20,
+  legSettings: CricketLegSettings = DEFAULT_LEG_SETTINGS
 ): CricketGameState => {
   return {
     players: players.map(createInitialPlayerState),
@@ -73,6 +96,8 @@ export const createInitialGameState = (
     gameFinished: false,
     winner: null,
     mode,
+    legSettings,
+    matchState: createMatchState(players.length, legSettings),
   };
 };
 
@@ -201,6 +226,41 @@ export const processDartHit = (
   if (checkWinCondition(currentPlayer, newState.players, newState.mode)) {
     newState.gameFinished = true;
     newState.winner = currentPlayer.player;
+
+    // Handle leg match logic
+    if (newState.legSettings.enabled !== false && newState.legSettings.legCount > 0) {
+      const winnerIndex = newState.currentPlayerIndex;
+      const matchUpdate = updateMatchState(
+        newState.matchState,
+        newState.legSettings,
+        winnerIndex
+      );
+      newState.matchState = matchUpdate.updatedMatchState;
+
+      if (matchUpdate.matchWon) {
+        // Match is finished, keep gameFinished = true (leg finished)
+        // matchState already has matchFinished = true and matchWinner set
+      } else {
+        // Match not finished, transition to next leg
+        // Reset player scores
+        newState.players = newState.players.map((playerState) =>
+          createInitialPlayerState(playerState.player)
+        );
+        // Reset game-specific fields
+        newState.dartsThrown = 0;
+        newState.currentRound = 1;
+        newState.gameFinished = false;
+        newState.winner = null;
+        newState.lastProcessedHit = undefined;
+        // Determine starting player based on nextLegState
+        if (matchUpdate.nextLegState) {
+          newState.currentPlayerIndex = matchUpdate.nextLegState.startingPlayerIndex;
+        } else {
+          // Fallback: alternate
+          newState.currentPlayerIndex = (winnerIndex + 1) % newState.players.length;
+        }
+      }
+    }
   }
 
   // Increment darts thrown (max 3)
@@ -226,6 +286,12 @@ export const cloneGameState = (state: CricketGameState): CricketGameState => {
         ])
       ),
     })),
+    matchState: {
+      ...state.matchState,
+      legWins: [...state.matchState.legWins],
+      setWins: state.matchState.setWins ? [...state.matchState.setWins] : undefined,
+    },
+    legSettings: { ...state.legSettings },
   };
 };
 

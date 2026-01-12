@@ -12,8 +12,12 @@ import {
   createInitialGameState,
   calculateDartValue,
   cloneGameState,
+  LegSettings,
+  LegWinCondition,
+  StartingPlayerRule,
 } from "@/services/zeroone";
 import { Segment } from "@/services/boardinfo";
+import { MatchFormat } from "@/services/match";
 
 // Hooks
 import { useGameHistory } from "../../cricket/game/hooks/useGameHistory";
@@ -111,6 +115,14 @@ export default function ZeroOneGame() {
     const modeString = sessionStorage.getItem("zeroOneMode");
     const doubleOutString = sessionStorage.getItem("zeroOneDoubleOut");
     const maxRoundsString = sessionStorage.getItem("zeroOneMaxRounds");
+    const legWinCondition = sessionStorage.getItem("zeroOneLegWinCondition") as 'firstTo' | 'bestOf' || 'firstTo';
+    const legCount = parseInt(sessionStorage.getItem("zeroOneLegCount") || "3");
+    const startingPlayerRule = sessionStorage.getItem("zeroOneStartingPlayerRule") as 'alternate' | 'loser' || 'alternate';
+    const matchFormat = sessionStorage.getItem("zeroOneMatchFormat") as 'legs' | 'sets' || 'legs';
+    const setWinCondition = sessionStorage.getItem("zeroOneSetWinCondition") as 'firstTo' | 'bestOf' || 'firstTo';
+    const setCount = parseInt(sessionStorage.getItem("zeroOneSetCount") || "3");
+    const legsPerSet = parseInt(sessionStorage.getItem("zeroOneLegsPerSet") || "3");
+    const startingSetPlayerRule = sessionStorage.getItem("zeroOneStartingSetPlayerRule") as 'alternate' | 'loser' || 'alternate';
 
     if (!playersJson) {
       router.push("/01");
@@ -121,7 +133,30 @@ export default function ZeroOneGame() {
     const mode = parseInt(modeString || "501") as ZeroOneMode;
     const doubleOut = doubleOutString === "true";
     const maxRounds = parseInt(maxRoundsString || "0");
-    setGameState(createInitialGameState(players, mode, doubleOut, maxRounds));
+
+    // Build leg settings
+    const format = matchFormat === 'legs' ? MatchFormat.Legs : MatchFormat.Sets;
+    const legWinConditionEnum = legWinCondition === 'firstTo' ? LegWinCondition.FirstTo : LegWinCondition.BestOf;
+    const startingPlayerRuleEnum = startingPlayerRule === 'alternate' ? StartingPlayerRule.Alternate : StartingPlayerRule.Loser;
+    const setWinConditionEnum = setWinCondition === 'firstTo' ? LegWinCondition.FirstTo : LegWinCondition.BestOf;
+    const startingSetPlayerRuleEnum = startingSetPlayerRule === 'alternate' ? StartingPlayerRule.Alternate : StartingPlayerRule.Loser;
+
+    const legSettings: LegSettings = {
+      format,
+      legWinCondition: legWinConditionEnum,
+      legCount,
+      startingPlayerRule: startingPlayerRuleEnum,
+      enabled: true,
+    };
+
+    if (format === MatchFormat.Sets) {
+      legSettings.sets = {
+        bestOf: setCount,
+        legsToWinSet: legsPerSet,
+      };
+    }
+
+    setGameState(createInitialGameState(players, mode, doubleOut, maxRounds, legSettings));
   }, [router, setGameState]);
 
   // Game history management

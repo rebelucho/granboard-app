@@ -14,6 +14,7 @@ import {
   cloneGameState,
 } from "@/services/targetbull";
 import { Segment } from "@/services/boardinfo";
+import { LegSettings, LegWinCondition, StartingPlayerRule, MatchFormat } from "@/services/match";
 
 // Hooks
 import { useGameHistory } from "../../cricket/game/hooks/useGameHistory";
@@ -143,6 +144,14 @@ export default function TargetBullGame() {
     const bullSplitModeString = sessionStorage.getItem("targetBullBullSplitMode");
     const maxRoundsString = sessionStorage.getItem("targetBullMaxRounds");
     const targetScoreString = sessionStorage.getItem("targetBullTargetScore");
+    const legWinCondition = sessionStorage.getItem("targetBullLegWinCondition") as 'firstTo' | 'bestOf' || 'firstTo';
+    const legCount = parseInt(sessionStorage.getItem("targetBullLegCount") || "3");
+    const startingPlayerRule = sessionStorage.getItem("targetBullStartingPlayerRule") as 'alternate' | 'loser' || 'alternate';
+    const matchFormat = sessionStorage.getItem("targetBullMatchFormat") as 'legs' | 'sets' || 'legs';
+    const setWinCondition = sessionStorage.getItem("targetBullSetWinCondition") as 'firstTo' | 'bestOf' || 'firstTo';
+    const setCount = parseInt(sessionStorage.getItem("targetBullSetCount") || "3");
+    const legsPerSet = parseInt(sessionStorage.getItem("targetBullLegsPerSet") || "3");
+    const startingSetPlayerRule = sessionStorage.getItem("targetBullStartingSetPlayerRule") as 'alternate' | 'loser' || 'alternate';
 
     if (!playersJson) {
       router.push("/targetbull");
@@ -153,7 +162,30 @@ export default function TargetBullGame() {
     const bullSplitMode = (bullSplitModeString as BullSplitMode) || BullSplitMode.Split;
     const maxRounds = parseInt(maxRoundsString || "10");
     const targetScore = parseInt(targetScoreString || "0");
-    setGameState(createInitialGameState(players, bullSplitMode, maxRounds, targetScore));
+
+    // Build leg settings
+    const format = matchFormat === 'legs' ? MatchFormat.Legs : MatchFormat.Sets;
+    const legWinConditionEnum = legWinCondition === 'firstTo' ? LegWinCondition.FirstTo : LegWinCondition.BestOf;
+    const startingPlayerRuleEnum = startingPlayerRule === 'alternate' ? StartingPlayerRule.Alternate : StartingPlayerRule.Loser;
+    const setWinConditionEnum = setWinCondition === 'firstTo' ? LegWinCondition.FirstTo : LegWinCondition.BestOf;
+    const startingSetPlayerRuleEnum = startingSetPlayerRule === 'alternate' ? StartingPlayerRule.Alternate : StartingPlayerRule.Loser;
+
+    const legSettings: LegSettings = {
+      format,
+      legWinCondition: legWinConditionEnum,
+      legCount,
+      startingPlayerRule: startingPlayerRuleEnum,
+      enabled: true,
+    };
+
+    if (format === MatchFormat.Sets) {
+      legSettings.sets = {
+        bestOf: setCount,
+        legsToWinSet: legsPerSet,
+      };
+    }
+
+    setGameState(createInitialGameState(players, bullSplitMode, maxRounds, targetScore, legSettings));
   }, [router, setGameState]);
 
   // Game history management

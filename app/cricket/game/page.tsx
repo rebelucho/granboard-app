@@ -12,6 +12,12 @@ import {
   createInitialGameState,
   cloneGameState,
 } from "@/services/cricket";
+import {
+  LegSettings,
+  MatchFormat,
+  LegWinCondition,
+  StartingPlayerRule,
+} from "@/services/match";
 import { Segment } from "@/services/boardinfo";
 
 // Hooks
@@ -119,6 +125,10 @@ export default function CricketGame() {
     const playersJson = sessionStorage.getItem("cricketPlayers");
     const gameModeString = sessionStorage.getItem("cricketGameMode");
     const maxRoundsString = sessionStorage.getItem("cricketMaxRounds");
+    const legsEnabledString = sessionStorage.getItem("cricketLegsEnabled");
+    const legWinConditionString = sessionStorage.getItem("cricketLegWinCondition");
+    const legCountString = sessionStorage.getItem("cricketLegCount");
+    const startingPlayerRuleString = sessionStorage.getItem("cricketStartingPlayerRule");
 
     if (!playersJson) {
       router.push("/cricket");
@@ -129,7 +139,18 @@ export default function CricketGame() {
     const mode =
       (gameModeString as CricketGameMode) || CricketGameMode.Standard;
     const maxRounds = parseInt(maxRoundsString || "20");
-    setGameState(createInitialGameState(players, mode, maxRounds));
+    
+    // Leg settings
+    const legsEnabled = legsEnabledString === 'true';
+    const legSettings: LegSettings = {
+      enabled: legsEnabled,
+      format: MatchFormat.Legs,
+      legWinCondition: (legWinConditionString as LegWinCondition) || LegWinCondition.FirstTo,
+      legCount: parseInt(legCountString || '3'),
+      startingPlayerRule: (startingPlayerRuleString as StartingPlayerRule) || StartingPlayerRule.Alternate,
+    };
+
+    setGameState(createInitialGameState(players, mode, maxRounds, legSettings));
   }, [router, setGameState]);
 
   // Game history management
@@ -382,6 +403,25 @@ export default function CricketGame() {
           />
         </div>
         <div className="lg:col-span-2 min-h-0 flex flex-col">
+          {/* Legs/Sets display */}
+          {gameState.legSettings.enabled && (
+            <div className="mb-4 p-3 bg-theme-card rounded-lg border border-accent/30 flex justify-between items-center">
+              <div className="text-theme-primary font-bold">
+                {gameState.legSettings.format === 'sets' ? 'Set' : 'Leg'} {gameState.matchState.currentLeg}
+                {gameState.matchState.currentSet && ` (Set ${gameState.matchState.currentSet})`}
+              </div>
+              <div className="flex gap-6">
+                {gameState.players.map((player, idx) => (
+                  <div key={player.player.id} className="text-center">
+                    <div className="text-sm text-theme-muted">{player.player.name}</div>
+                    <div className="text-2xl font-bold text-accent">
+                      {gameState.matchState.legWins[idx]}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <ScoreBoard
             players={gameState.players}
             currentPlayerIndex={gameState.currentPlayerIndex}

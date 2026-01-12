@@ -1,9 +1,29 @@
 import { Segment, SegmentSection, SegmentType } from "./boardinfo";
+import {
+  LegSettings,
+  LegWinCondition,
+  StartingPlayerRule,
+  MatchState,
+  createMatchState,
+  updateMatchState,
+  getNextStartingPlayer,
+  MatchFormat,
+} from './match';
 
 export enum BullSplitMode {
   Split = "split",      // 25 for 25, 50 for Bull
   Unified = "unified",  // 50 for both 25 and Bull
 }
+
+export type TargetBullLegSettings = LegSettings;
+
+export const DEFAULT_LEG_SETTINGS: TargetBullLegSettings = {
+  enabled: false,
+  format: MatchFormat.Legs,
+  legWinCondition: LegWinCondition.FirstTo,
+  legCount: 3,
+  startingPlayerRule: StartingPlayerRule.Alternate,
+};
 
 export interface Player {
   id: string;
@@ -32,6 +52,8 @@ export interface TargetBullGameState {
   winner: Player | null;
   bullSplitMode: BullSplitMode;
   lastProcessedHit?: string;   // To prevent double processing in React Strict Mode
+  legSettings: TargetBullLegSettings;
+  matchState: MatchState;      // состояние матча (леги/сеты)
 }
 
 export const createInitialPlayerState = (
@@ -52,7 +74,8 @@ export const createInitialGameState = (
   players: Player[],
   bullSplitMode: BullSplitMode = BullSplitMode.Split,
   maxRounds: number = 10,
-  targetScore: number = 0
+  targetScore: number = 0,
+  legSettings: TargetBullLegSettings = DEFAULT_LEG_SETTINGS
 ): TargetBullGameState => {
   return {
     players: players.map(createInitialPlayerState),
@@ -65,6 +88,8 @@ export const createInitialGameState = (
     gameFinished: false,
     winner: null,
     bullSplitMode,
+    legSettings,
+    matchState: createMatchState(players.length, legSettings),
   };
 };
 
@@ -156,6 +181,43 @@ export const processDartHit = (
     newState.gameFinished = true;
     newState.winner = currentPlayer.player;
     console.log("🏆 Winner by target score:", currentPlayer.player.name);
+
+    // Handle leg match logic
+    if (newState.legSettings.enabled && newState.legSettings.legCount > 0) {
+      const winnerIndex = newState.currentPlayerIndex;
+      const matchUpdate = updateMatchState(
+        newState.matchState,
+        newState.legSettings,
+        winnerIndex
+      );
+      newState.matchState = matchUpdate.updatedMatchState;
+
+      if (matchUpdate.matchWon) {
+        // Match completed
+        newState.gameFinished = true;
+        newState.winner = currentPlayer.player;
+        // matchWinner already set in matchState
+      } else {
+        // Match continues, transition to next leg
+        // Reset player scores
+        newState.players = newState.players.map((playerState) =>
+          createInitialPlayerState(playerState.player)
+        );
+        // Reset game-specific fields
+        newState.dartsThrown = 0;
+        newState.currentRound = 1;
+        newState.gameFinished = false;
+        newState.winner = null;
+        newState.lastProcessedHit = undefined;
+        // Set starting player for next leg
+        if (matchUpdate.nextLegState) {
+          newState.currentPlayerIndex = matchUpdate.nextLegState.startingPlayerIndex;
+        } else {
+          // fallback: alternate
+          newState.currentPlayerIndex = (winnerIndex + 1) % newState.players.length;
+        }
+      }
+    }
   }
 
   // Mark this hit as processed
@@ -172,6 +234,8 @@ export const cloneGameState = (state: TargetBullGameState): TargetBullGameState 
     players: state.players.map((playerState) => ({
       ...playerState,
     })),
+    legSettings: { ...state.legSettings },
+    matchState: { ...state.matchState },
   };
 };
 
@@ -210,6 +274,44 @@ export const nextPlayer = (
       const winners = newState.players.filter((p) => p.totalScore === maxScore);
       // If tie, first player with that score wins (or could be tie, but we pick first)
       newState.winner = winners[0]?.player || null;
+
+      // Handle leg match logic if there is a winner
+      if (newState.winner && newState.legSettings.enabled && newState.legSettings.legCount > 0) {
+        const winnerIndex = newState.players.findIndex(p => p.player.id === newState.winner!.id);
+        if (winnerIndex >= 0) {
+          const matchUpdate = updateMatchState(
+            newState.matchState,
+            newState.legSettings,
+            winnerIndex
+          );
+          newState.matchState = matchUpdate.updatedMatchState;
+
+          if (matchUpdate.matchWon) {
+            // Match completed
+            newState.gameFinished = true;
+            // matchWinner already set in matchState
+          } else {
+            // Match continues, transition to next leg
+            // Reset player scores
+            newState.players = newState.players.map((playerState) =>
+              createInitialPlayerState(playerState.player)
+            );
+            // Reset game-specific fields
+            newState.dartsThrown = 0;
+            newState.currentRound = 1;
+            newState.gameFinished = false;
+            newState.winner = null;
+            newState.lastProcessedHit = undefined;
+            // Set starting player for next leg
+            if (matchUpdate.nextLegState) {
+              newState.currentPlayerIndex = matchUpdate.nextLegState.startingPlayerIndex;
+            } else {
+              // fallback: alternate
+              newState.currentPlayerIndex = (winnerIndex + 1) % newState.players.length;
+            }
+          }
+        }
+      }
     }
   }
 

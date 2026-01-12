@@ -20,6 +20,15 @@ export default function ZeroOneSetup() {
   const [gameMode, setGameMode] = useState<ZeroOneMode>(ZeroOneMode.FiveOhOne);
   const [doubleOut, setDoubleOut] = useState<boolean>(false);
   const [maxRounds, setMaxRounds] = useState<number>(0); // 0 = unlimited
+  const [matchEnabled, setMatchEnabled] = useState<boolean>(true);
+  const [legWinCondition, setLegWinCondition] = useState<'firstTo' | 'bestOf'>('firstTo');
+  const [legCount, setLegCount] = useState<number>(3);
+  const [startingPlayerRule, setStartingPlayerRule] = useState<'alternate' | 'loser'>('alternate');
+  const [matchFormat, setMatchFormat] = useState<'legs' | 'sets'>('legs');
+  const [setWinCondition, setSetWinCondition] = useState<'firstTo' | 'bestOf'>('firstTo');
+  const [setCount, setSetCount] = useState<number>(3);
+  const [legsPerSet, setLegsPerSet] = useState<number>(3);
+  const [startingSetPlayerRule, setStartingSetPlayerRule] = useState<'alternate' | 'loser'>('alternate');
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const { granboard, connectToBoard } = useGranboard();
@@ -53,6 +62,14 @@ export default function ZeroOneSetup() {
     sessionStorage.setItem("zeroOneMode", gameMode.toString());
     sessionStorage.setItem("zeroOneDoubleOut", doubleOut.toString());
     sessionStorage.setItem("zeroOneMaxRounds", maxRounds.toString());
+    sessionStorage.setItem("zeroOneLegWinCondition", legWinCondition);
+    sessionStorage.setItem("zeroOneLegCount", legCount.toString());
+    sessionStorage.setItem("zeroOneStartingPlayerRule", startingPlayerRule);
+    sessionStorage.setItem("zeroOneMatchFormat", matchFormat);
+    sessionStorage.setItem("zeroOneSetWinCondition", setWinCondition);
+    sessionStorage.setItem("zeroOneSetCount", setCount.toString());
+    sessionStorage.setItem("zeroOneLegsPerSet", legsPerSet.toString());
+    sessionStorage.setItem("zeroOneStartingSetPlayerRule", startingSetPlayerRule);
     router.push("/01/game");
   };
 
@@ -98,6 +115,14 @@ export default function ZeroOneSetup() {
     sessionStorage.setItem("zeroOneMode", gameMode.toString());
     sessionStorage.setItem("zeroOneDoubleOut", doubleOut.toString());
     sessionStorage.setItem("zeroOneMaxRounds", maxRounds.toString());
+    sessionStorage.setItem("zeroOneLegWinCondition", legWinCondition);
+    sessionStorage.setItem("zeroOneLegCount", legCount.toString());
+    sessionStorage.setItem("zeroOneStartingPlayerRule", startingPlayerRule);
+    sessionStorage.setItem("zeroOneMatchFormat", matchFormat);
+    sessionStorage.setItem("zeroOneSetWinCondition", setWinCondition);
+    sessionStorage.setItem("zeroOneSetCount", setCount.toString());
+    sessionStorage.setItem("zeroOneLegsPerSet", legsPerSet.toString());
+    sessionStorage.setItem("zeroOneStartingSetPlayerRule", startingSetPlayerRule);
     router.push("/01/game");
   };
 
@@ -271,6 +296,256 @@ export default function ZeroOneSetup() {
               </div>
             </label>
           </div>
+        </div>
+
+        {/* Match format settings */}
+        <div className="mb-8">
+          <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer mb-6">
+            <input
+              type="checkbox"
+              checked={matchEnabled}
+              onChange={(e) => setMatchEnabled(e.target.checked)}
+              className="w-6 h-6 text-accent border-gray-300 rounded focus:ring-accent"
+            />
+            <div className="flex-1">
+              <div className="font-bold text-theme-primary">Играть по легам/сетам</div>
+              <div className="text-sm text-theme-muted">Включить формат матча с легами или сетами</div>
+            </div>
+          </label>
+          {matchEnabled && (
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold mb-4 text-accent">
+                Формат матча
+              </h3>
+              
+              {/* Format selection */}
+              <div className="space-y-4">
+                <h4 className="text-xl font-bold text-theme-primary">Играть по:</h4>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer flex-1">
+                    <input
+                      type="radio"
+                      name="matchFormat"
+                      value="legs"
+                      checked={matchFormat === 'legs'}
+                      onChange={() => setMatchFormat('legs')}
+                      className="w-5 h-5 text-accent"
+                    />
+                    <div className="flex-1">
+                      <div className="font-bold text-theme-primary">Легам</div>
+                      <div className="text-sm text-theme-muted">Игра до победы в определённом количестве легов</div>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer flex-1">
+                    <input
+                      type="radio"
+                      name="matchFormat"
+                      value="sets"
+                      checked={matchFormat === 'sets'}
+                      onChange={() => setMatchFormat('sets')}
+                      className="w-5 h-5 text-accent"
+                    />
+                    <div className="flex-1">
+                      <div className="font-bold text-theme-primary">Сетам</div>
+                      <div className="text-sm text-theme-muted">Игра до победы в сетах, каждый сет состоит из легов</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Legs configuration */}
+              {matchFormat === 'legs' && (
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="legWinCondition"
+                          value="firstTo"
+                          checked={legWinCondition === 'firstTo'}
+                          onChange={() => setLegWinCondition('firstTo')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <span className="text-theme-primary">До победы в</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={legCount}
+                        onChange={(e) => setLegCount(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                        disabled={legWinCondition !== 'firstTo'}
+                      />
+                      <span className="text-theme-secondary">легах</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="legWinCondition"
+                          value="bestOf"
+                          checked={legWinCondition === 'bestOf'}
+                          onChange={() => setLegWinCondition('bestOf')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <span className="text-theme-primary">Лучший из</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={legCount}
+                        onChange={(e) => setLegCount(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                        disabled={legWinCondition !== 'bestOf'}
+                      />
+                      <span className="text-theme-secondary">легов</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold mb-3 text-theme-primary">Право начать лег</h4>
+                    <div className="space-y-3">
+                      <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer">
+                        <input
+                          type="radio"
+                          name="startingPlayerRule"
+                          value="alternate"
+                          checked={startingPlayerRule === 'alternate'}
+                          onChange={() => setStartingPlayerRule('alternate')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <div className="flex-1">
+                          <div className="font-bold text-theme-primary">По очереди</div>
+                          <div className="text-sm text-theme-muted">Право начинать лег переходит от игрока к игроку по установленному порядку</div>
+                        </div>
+                      </label>
+                      <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer">
+                        <input
+                          type="radio"
+                          name="startingPlayerRule"
+                          value="loser"
+                          checked={startingPlayerRule === 'loser'}
+                          onChange={() => setStartingPlayerRule('loser')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <div className="flex-1">
+                          <div className="font-bold text-theme-primary">Проигравший</div>
+                          <div className="text-sm text-theme-muted">Начинает лег проигравший предыдущий лег</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Sets configuration */}
+              {matchFormat === 'sets' && (
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="setWinCondition"
+                          value="firstTo"
+                          checked={setWinCondition === 'firstTo'}
+                          onChange={() => setSetWinCondition('firstTo')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <span className="text-theme-primary">До победы в</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={setCount}
+                        onChange={(e) => setSetCount(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                        disabled={setWinCondition !== 'firstTo'}
+                      />
+                      <span className="text-theme-secondary">сетах</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="setWinCondition"
+                          value="bestOf"
+                          checked={setWinCondition === 'bestOf'}
+                          onChange={() => setSetWinCondition('bestOf')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <span className="text-theme-primary">Лучший из</span>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={setCount}
+                        onChange={(e) => setSetCount(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                        disabled={setWinCondition !== 'bestOf'}
+                      />
+                      <span className="text-theme-secondary">сетов</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold mb-3 text-theme-primary">Легов в каждом сете</h4>
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={legsPerSet}
+                        onChange={(e) => setLegsPerSet(Math.max(1, parseInt(e.target.value) || 1))}
+                        className="px-4 py-2 bg-theme-input border border-theme-input rounded-lg w-20 text-center font-bold"
+                      />
+                      <span className="text-theme-secondary">легов для победы в сете</span>
+                    </div>
+                    <p className="text-sm text-theme-muted mt-2">Внутри сета игроки чередуются по очереди.</p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold mb-3 text-theme-primary">Право начать сет</h4>
+                    <div className="space-y-3">
+                      <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer">
+                        <input
+                          type="radio"
+                          name="startingSetPlayerRule"
+                          value="alternate"
+                          checked={startingSetPlayerRule === 'alternate'}
+                          onChange={() => setStartingSetPlayerRule('alternate')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <div className="flex-1">
+                          <div className="font-bold text-theme-primary">По очереди</div>
+                          <div className="text-sm text-theme-muted">Право начинать сет переходит от игрока к игроку по установленному порядку</div>
+                        </div>
+                      </label>
+                      <label className="flex items-center gap-3 p-4 bg-theme-card rounded-xl border border-theme-card hover:border-accent transition-all cursor-pointer">
+                        <input
+                          type="radio"
+                          name="startingSetPlayerRule"
+                          value="loser"
+                          checked={startingSetPlayerRule === 'loser'}
+                          onChange={() => setStartingSetPlayerRule('loser')}
+                          className="w-5 h-5 text-accent"
+                        />
+                        <div className="flex-1">
+                          <div className="font-bold text-theme-primary">Проигравший</div>
+                          <div className="text-sm text-theme-muted">Начинает сет проигравший предыдущий сет</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="mb-8">
